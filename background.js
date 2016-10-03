@@ -6,7 +6,7 @@ var CONFIG = {
 var getBookmarks = function () {
   var path = []
   var walk = function (nodes) {
-    _.each(nodes, function (node) {
+    for (var node of nodes) {
       path.push(node)
       if (node.children) {
         walk(node.children)
@@ -14,12 +14,13 @@ var getBookmarks = function () {
         ENTRIES.push(_.clone(path))
       }
       path.pop()
-    })
+    }
   }
+
   return new Promise(function (resolve) {
     chrome.bookmarks.getTree(function (tree) {
       walk(tree)
-      resolve(ENTRIES)
+      resolve()
     })
   })
 }
@@ -48,7 +49,7 @@ var list = function () {
   return JSON.stringify(response)
 }
 
-var search = function (query) {
+var search = function (keyword) {
   var response = []
   return JSON.stringify(response)
 }
@@ -61,7 +62,7 @@ var initialize = function () {
         response = list()
         break
       case 'search':
-        response = search(request.query)
+        response = search(request.keyword)
         break
     }
     sendResponse(response)
