@@ -24,6 +24,18 @@ var controller = function (data) {
 
   var selectedEntry
 
+  var testImage = function (src) {
+    var deferred = m.deferred()
+    var img = new Image()
+    img.src = src
+    img.onload = function () {
+      deferred.resolve(src)
+    }
+    img.onerror = function () {
+      deferred.reject()
+    }
+    return deferred.promise
+  }
   var initialize = function (keyword) {
     keyword = _.trim(keyword)
     var getEntries = keyword
@@ -57,6 +69,7 @@ var controller = function (data) {
   ctrl.nav = function (e) {
     if (e.keyCode !== 38 && e.keyCode !== 40) return
 
+    e.preventDefault()
     var entries = ctrl.entries()
     var nextIndex = entries.indexOf(selectedEntry)
     var maxIndex = entries.length - 1
@@ -72,6 +85,41 @@ var controller = function (data) {
     }
     selectedEntry = entries[nextIndex]
   }
+  var faviconCaches = {}
+  ctrl.getFavicon = function (url) {
+    var domain = '0'
+    var googleFaviconServer = 'https://www.google.com/s2/favicons'
+
+    try {
+      domain = new URL(url).origin
+    } catch (e) {}
+
+    var cachedFavicon = faviconCaches[domain]
+    if (cachedFavicon) {
+      var deferred = m.deferred()
+      deferred.resolve(cachedFavicon)
+      m.redraw()
+      return deferred.promise
+    }
+
+    return testImage(domain + '/favicon.ico')
+      .then(_.identity, function () {
+        return testImage(googleFaviconServer + '?domain=' + domain)
+      })
+      .then(_.identity, function () {
+        var defaultGoogleFavicon = googleFaviconServer + '?domain=0'
+        return testImage(defaultFavicon)
+      })
+      .then(_.identity, function () {
+        var defaultLocalFavicon = 'xxx'
+        return defaultFavicon
+      })
+      .then(function (src) {
+        faviconCaches[domain] = src
+        m.redraw()
+        return src
+      })
+  }
 
   initialize()
 }
@@ -83,12 +131,24 @@ var view = function (ctrl) {
         m('input.keyword', {autofocus: true, oninput: ctrl.search})
       ]),
       m('ul.entries', _.map(ctrl.entries(), function (entry) {
+        var entryClasses = ''
+        var favicon
+
+        if (ctrl.isSelected(entry)) entryClasses += 'selected'
+        ctrl.getFavicon(entry.url).then(function (src) {
+          favicon = src
+        })
+
         return m('li.entry', {
-          class: ctrl.isSelected(entry) ? 'selected' : null,
+          class: entryClasses,
           onclick: ctrl.open,
           onmouseover: ctrl.select(entry)
         }, [
-          m('.title', entry.title),
+          m('.title', {
+            style: {
+              'background-image': favicon ? 'url(' + favicon + ')' : 'none'
+            }
+          }, entry.title),
           m('.path', entry.path + entry.title)
         ])
       }))

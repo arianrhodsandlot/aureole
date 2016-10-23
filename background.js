@@ -32,9 +32,10 @@ var dumpBookmarkEntry = function (bookmarkEntry) {
     var title = node.title
 
     if (_.isUndefined(node.children)) {
+      var url = node.url
       result.id = node.id
-      result.url = node.url
       result.title = title
+      result.url = url
     } else if (title) {
       path += title + '/'
     }
@@ -77,7 +78,6 @@ var initialize = function () {
         break
       case 'search':
         response = search(request.params.keyword)
-        console.log(response)
         break
       case 'open':
         chrome.tabs.create({url: request.params.url})

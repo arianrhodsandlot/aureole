@@ -2,6 +2,8 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 
 * {
   box-sizing: border-box;
+  outline: none;
+  border: none;
 }
 html, body {
   width: 500px;
@@ -12,19 +14,22 @@ html, body {
   font-family: sans-serif;
   font-size: 14px;
 }
+form {
+  padding: 8px;
+  background: transparent;
+  position: relative;
+  z-index: 1;
+}
 .keyword {
   display: block;
-  width: 100%;
+  width: 484px;
   padding: 10px 14px;
-  box-shadow: 0 0 6px #666;
-  outline: none;
-  border: none;
+  box-shadow: 0 0 4px #888;
   font-size: 16px;
-  position: fixed;
   top: 0;
+  background: transparent;
 }
 .entries {
-  margin: 38px 0 0 0;
   height: 290px;
   width: 100%;
   overflow: auto;
@@ -39,6 +44,12 @@ html, body {
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 1.2;
+  padding: 0 0 0 20px;
+}
+.title {
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 .path {
   font-size: 12px;
