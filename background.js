@@ -31,13 +31,13 @@ var dumpBookmarkEntry = function (bookmarkEntry) {
   _.each(bookmarkEntry, function (node) {
     var title = node.title
 
-    if (!node.children) {
+    if (_.isUndefined(node.children)) {
+      result.id = node.id
+      result.url = node.url
       result.title = title
-      path += title + '(' + node.url + ')'
-      return
+    } else if (title) {
+      path += title + '/'
     }
-
-    if (title) path += title + '/'
   })
   result.path = path
   return result
@@ -50,7 +50,17 @@ var list = function () {
 }
 
 var search = function (keyword) {
-  var response = []
+  var response = _.map(ENTRIES, dumpBookmarkEntry)
+  var fuse = new Fuse(response, {
+    shouldSort: true,
+    threshold: 0.6,
+    location: 0,
+    distance: 100,
+    maxPatternLength: 32,
+    keys: ['title', 'path']
+  })
+  response = fuse.search(keyword)
+  response = _.take(response, CONFIG.size)
   return JSON.stringify(response)
 }
 
@@ -62,7 +72,11 @@ var initialize = function () {
         response = list()
         break
       case 'search':
-        response = search(request.keyword)
+        response = search(request.params.keyword)
+        console.log(response)
+        break
+      case 'open':
+        chrome.tabs.create({url: request.params.url})
         break
     }
     sendResponse(response)
