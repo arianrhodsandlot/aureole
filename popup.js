@@ -36,6 +36,39 @@ var controller = function (data) {
     }
     return deferred.promise
   }
+  var scrollIntoViewIfNeeded = function (el) {
+    try {
+      el.scasdrollIntoViewIfNeeded()
+    } catch (e) {
+      // refer: scrollIntoViewIfNeeded 4 everyone!!!
+      // (https://gist.github.com/hsablonniere/2581101)
+      var scrollIntoViewIfNeeded = function (el, centerIfNeeded = false) {
+      window.el = el
+        var parent = el.parentNode,
+            parentComputedStyle = window.getComputedStyle(parent, null),
+            parentBorderTopWidth = parseInt(parentComputedStyle.getPropertyValue('border-top-width')),
+            parentBorderLeftWidth = parseInt(parentComputedStyle.getPropertyValue('border-left-width')),
+            overTop = el.offsetTop - parent.offsetTop < parent.scrollTop,
+            overBottom = (el.offsetTop - parent.offsetTop + el.clientHeight - parentBorderTopWidth) > (parent.scrollTop + parent.clientHeight),
+            overLeft = el.offsetLeft - parent.offsetLeft < parent.scrollLeft,
+            overRight = (el.offsetLeft - parent.offsetLeft + el.clientWidth - parentBorderLeftWidth) > (parent.scrollLeft + parent.clientWidth),
+            alignWithTop = overTop && !overBottom
+
+        if ((overTop || overBottom) && centerIfNeeded) {
+          parent.scrollTop = el.offsetTop - parent.offsetTop - parent.clientHeight / 2 - parentBorderTopWidth + el.clientHeight / 2
+        }
+
+        if ((overLeft || overRight) && centerIfNeeded) {
+          parent.scrollLeft = el.offsetLeft - parent.offsetLeft - parent.clientWidth / 2 - parentBorderLeftWidth + el.clientWidth / 2
+        }
+
+        if ((overTop || overBottom || overLeft || overRight) && !centerIfNeeded) {
+          el.scrollIntoView(alignWithTop)
+        }
+      }
+      scrollIntoViewIfNeeded(el)
+    }
+  }
   var initialize = function (keyword) {
     keyword = _.trim(keyword)
     var getEntries = keyword
@@ -121,6 +154,13 @@ var controller = function (data) {
         return src
       })
   }
+  ctrl.scrollIntoViewIfNeeded = function (entry) {
+    return function (el) {
+      if (!ctrl.isSelected(entry)) return
+
+      scrollIntoViewIfNeeded(el)
+    }
+  }
 
   initialize()
 }
@@ -143,7 +183,8 @@ var view = function (ctrl) {
         return m('li.entry', {
           class: entryClasses,
           onclick: ctrl.open,
-          onmouseover: ctrl.select(entry)
+          onmouseover: ctrl.select(entry),
+          config: ctrl.scrollIntoViewIfNeeded(entry)
         }, [
           m('.title', {
             style: {

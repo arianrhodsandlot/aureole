@@ -7,7 +7,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 }
 html, body {
   width: 500px;
-  height: 290px;
+  height: 320px;
   margin: 0;
   padding: 0;
   outline: none;
@@ -30,13 +30,16 @@ form {
   background: transparent;
 }
 .entries {
-  height: 290px;
+  height: 320px;
   width: 100%;
   overflow: auto;
 }
 .entry {
   cursor: pointer;
   padding: 6px 14px;
+}
+.entry.selected {
+  background: #f0f0f0;
 }
 .title, .path {
   width: 100%;
@@ -54,8 +57,5 @@ form {
 .path {
   font-size: 12px;
   color: #888;
-  margin: 4px 0 0 0;
-}
-.entry.selected {
-  background: #f0f0f0;
+  margin: 6px 0 0 0;
 }
