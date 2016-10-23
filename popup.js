@@ -3,8 +3,8 @@ var service = function (message) {
   var deferred = m.deferred()
   m.startComputation()
   chrome.runtime.sendMessage(message, function (response) {
-    entries = JSON.parse(response)
-    deferred.resolve(entries)
+    response = JSON.parse(response)
+    deferred.resolve(response)
     m.endComputation()
   })
   return deferred.promise
@@ -85,8 +85,8 @@ var controller = function (data) {
     }
     selectedEntry = entries[nextIndex]
   }
-  var faviconCaches = {}
   ctrl.getFavicon = function (url) {
+    var faviconCaches = JSON.parse(localStorage.faviconCaches)
     var domain = '0'
     var googleFaviconServer = 'https://www.google.com/s2/favicons'
 
@@ -115,8 +115,9 @@ var controller = function (data) {
         return defaultFavicon
       })
       .then(function (src) {
-        faviconCaches[domain] = src
         m.redraw()
+        faviconCaches[domain] = src
+        localStorage.faviconCaches = JSON.stringify(faviconCaches)
         return src
       })
   }
@@ -154,6 +155,12 @@ var view = function (ctrl) {
       }))
     ])
   ]
+}
+
+try {
+  JSON.parse(localStorage.faviconCaches)
+} catch (e) {
+  localStorage.faviconCaches = JSON.stringify({})
 }
 
 document.addEventListener('DOMContentLoaded', function() {

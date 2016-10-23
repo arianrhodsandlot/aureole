@@ -71,19 +71,19 @@ var search = function (keyword) {
 
 var initialize = function () {
   chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    var response
+    var sendJson = _.flow(JSON.stringify, sendResponse)
     switch (request.action) {
       case 'list':
-        response = list()
+        sendJson(list())
         break
       case 'search':
-        response = search(request.params.keyword)
+        sendJson(search(request.params.keyword))
         break
       case 'open':
         chrome.tabs.create({url: request.params.url})
+        sendJson(null)
         break
     }
-    sendResponse(response)
   })
 }
 
