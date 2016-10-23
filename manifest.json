@@ -3,10 +3,12 @@
   "version": "1.1",
   "description": "A browser action with a popup dump of all bookmarks, including search, add, edit and delete.",
   "permissions": [
-    "bookmarks"
+    "bookmarks",
+    "tabs"
   ],
   "background": {
     "scripts": [
+      "fuse.min.js",
       "lodash.min.js",
       "background.js"
     ]
@@ -17,5 +19,14 @@
       "default_popup": "popup.html"
   },
   "manifest_version": 2,
-  "content_security_policy": "script-src 'self' https://unpkg.com; object-src 'self'"
+  "content_security_policy": "script-src 'self' https://unpkg.com; object-src 'self'",
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "windows": "Ctrl+Shift+L",
+        "mac": "Command+Shift+L",
+        "linux": "Ctrl+Shift+L"
+      }
+    }
+  }
 }
