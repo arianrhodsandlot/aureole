@@ -21,29 +21,36 @@ service.open = function (url) {
 
 var controller = function (data) {
   var ctrl = this
-  window.ctrl=ctrl
 
   var selectedEntry
-  var updateSelectedEntry = function (entries) {
-    selectedEntry = entries[0]
-    return entries
+
+  var initialize = function (keyword) {
+    keyword = _.trim(keyword)
+    var getEntries = keyword
+      ? service.search(keyword)
+      : service.list()
+
+    var updateSelectedEntry = function (entries) {
+      selectedEntry = entries[0]
+      return entries
+    }
+
+    ctrl.entries = m.prop(getEntries
+      .then(updateSelectedEntry))
   }
 
   ctrl.keyword = m.prop('')
-  ctrl.entries = m.prop(service.list().then(updateSelectedEntry))
+  ctrl.entries = m.prop(null)
 
-  ctrl.search = m.withAttr('value', function (keyword) {
-    ctrl.entries = m.prop(service.search(keyword).then(updateSelectedEntry))
-  })
-  ctrl.open = _.constant(function () {
+  ctrl.search = m.withAttr('value', initialize)
+  ctrl.open = function () {
     service.open(selectedEntry.url)
-  })
+  }
   ctrl.isSelected = function (entry) {
     return entry === selectedEntry
   }
   ctrl.select = function (entry) {
     return function () {
-      console.log(entry)
       selectedEntry = entry
     }
   }
@@ -65,23 +72,27 @@ var controller = function (data) {
     }
     selectedEntry = entries[nextIndex]
   }
+
+  initialize()
 }
 
 var view = function (ctrl) {
   return [
-    m('form', {onsubmit: ctrl.open()}, [
-      m('input.keyword', {autofocus: true, oninput: ctrl.search, onkeydown: ctrl.nav}),
-    ]),
-    m('ul', _.map(ctrl.entries(), function (entry) {
-      return m('li.entry', {
-        class: ctrl.isSelected(entry) ? 'selected' : null,
-        onclick: ctrl.open(),
-        onmouseover: ctrl.select(entry)
-      }, [
-        m('div.title', entry.title),
-        m('div.path', entry.path + entry.title)
-      ])
-    }))
+    m('.container', {onkeydown: ctrl.nav, tabindex: '1'}, [
+      m('form', {onsubmit: ctrl.open}, [
+        m('input.keyword', {autofocus: true, oninput: ctrl.search})
+      ]),
+      m('ul.entries', _.map(ctrl.entries(), function (entry) {
+        return m('li.entry', {
+          class: ctrl.isSelected(entry) ? 'selected' : null,
+          onclick: ctrl.open,
+          onmouseover: ctrl.select(entry)
+        }, [
+          m('.title', entry.title),
+          m('.path', entry.path + entry.title)
+        ])
+      }))
+    ])
   ]
 }
 

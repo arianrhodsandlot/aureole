@@ -57,7 +57,11 @@ var search = function (keyword) {
     location: 0,
     distance: 100,
     maxPatternLength: 32,
-    keys: ['title', 'path']
+    keys: [
+      {name: 'title', weight: 0.8},
+      {name: 'url', weight: 0.7},
+      {name: 'path', weight: 0.1}
+    ]
   })
   response = fuse.search(keyword)
   response = _.take(response, CONFIG.size)
