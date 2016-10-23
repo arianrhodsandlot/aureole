@@ -47,7 +47,7 @@ var dumpBookmarkEntry = function (bookmarkEntry) {
 var list = function () {
   var response = _.take(ENTRIES, CONFIG.size)
   response = _.map(response, dumpBookmarkEntry)
-  return JSON.stringify(response)
+  return response
 }
 
 var search = function (keyword) {
@@ -66,7 +66,7 @@ var search = function (keyword) {
   })
   response = fuse.search(keyword)
   response = _.take(response, CONFIG.size)
-  return JSON.stringify(response)
+  return response
 }
 
 var initialize = function () {
