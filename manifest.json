@@ -24,7 +24,7 @@
     "_execute_browser_action": {
       "suggested_key": {
         "windows": "Ctrl+Shift+L",
-        "mac": "Command+Shift+L",
+        "mac": "Command+P",
         "linux": "Ctrl+Shift+L"
       }
     }
