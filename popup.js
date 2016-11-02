@@ -173,11 +173,8 @@ var view = function (ctrl) {
           onclick: ctrl.open,
           config: ctrl.scrollIntoViewIfNeeded(entry)
         }, [
-          m('.title', {
-            style: {
-              'background-image': favicon ? 'url(' + favicon + ')' : 'none'
-            }
-          }, highlight(entry.title)),
+          m('img.favicon', {src: favicon}),
+          m('.title', highlight(entry.title)),
           m('.path', highlight(entry.path + entry.title)),
           m('.url', highlight(entry.url))
         ])

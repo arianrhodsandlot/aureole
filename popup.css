@@ -59,6 +59,12 @@ form {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
+.favicon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  margin: 0 0 -16px -2px;
+}
 .title {
   background-repeat: no-repeat;
   background-position: left center;
@@ -72,6 +78,9 @@ form {
 }
 .url {
   font-family: monospace;
+}
+.entry.selected .url {
+  text-decoration: underline;
 }
 .path i,
 .url i {
