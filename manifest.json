@@ -4,6 +4,7 @@
   "description": "A browser action with a popup dump of all bookmarks, including search, add, edit and delete.",
   "permissions": [
     "bookmarks",
+    "history",
     "tabs"
   ],
   "background": {

@@ -145,6 +145,8 @@ var controller = function (data) {
 }
 
 var view = function (ctrl) {
+  var entries = ctrl.entries()
+  console.log(entries)
   var highlight = function (text, keyword) {
     var keyword = ctrl.keyword()
     var highlighted = ctrl.highlight(text, keyword)
@@ -158,7 +160,7 @@ var view = function (ctrl) {
       m('form', {onsubmit: ctrl.open}, [
         m('input.keyword', {autofocus: true, oninput: ctrl.search})
       ]),
-      m('ul.entries', _.map(ctrl.entries(), function (entry) {
+      m('ul.entries', _.map(entries, function (entry) {
         var entryClasses = ''
         var favicon
 
@@ -175,7 +177,7 @@ var view = function (ctrl) {
         }, [
           m('img.favicon', {src: favicon}),
           m('.title', highlight(entry.title)),
-          m('.path', highlight(entry.path + entry.title)),
+          m('.path', highlight(entry.path || '' + entry.title)),
           m('.url', highlight(entry.url))
         ])
       }))
