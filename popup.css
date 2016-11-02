@@ -45,8 +45,13 @@ form {
 .entry.selected {
   background: #f0f0f0;
 }
+.entry i {
+  font-weight: bold;
+  font-style: normal;
+}
 .title,
-.path {
+.path,
+.url {
   line-height: 1.2;
   overflow: hidden;
   width: 100%;
@@ -59,8 +64,16 @@ form {
   background-position: left center;
   background-size: contain;
 }
-.path {
+.path,
+.url {
   font-size: 12px;
   margin: 6px 0 0 0;
   color: #888;
+}
+.url {
+  font-family: monospace;
+}
+.path i,
+.url i {
+  color: #555;
 }

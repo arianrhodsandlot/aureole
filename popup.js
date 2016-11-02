@@ -40,6 +40,7 @@ var controller = function (data) {
   }
   var initialize = function (keyword) {
     keyword = _.trim(keyword)
+    ctrl.keyword(keyword)
     var getEntries = keyword
       ? service.search(keyword)
       : service.list()
@@ -60,17 +61,13 @@ var controller = function (data) {
   ctrl.open = function () {
     service.open(selectedEntry.url)
   }
-  ctrl.selectAndOpen = function (entry) {
-    return function () {
-      ctrl.select(entry)
-      ctrl.open()
-    }
-  }
   ctrl.isSelected = function (entry) {
     return entry === selectedEntry
   }
   ctrl.select = function (entry) {
-    selectedEntry = entry
+    return function () {
+      selectedEntry = entry
+    }
   }
   ctrl.nav = function (e) {
     if (e.keyCode !== 38 && e.keyCode !== 40) return
@@ -89,7 +86,7 @@ var controller = function (data) {
         if (nextIndex > maxIndex) nextIndex = 0
         break
     }
-    ctrl.select(entries[nextIndex])
+    ctrl.select(entries[nextIndex])()
   }
   ctrl.getFavicon = function (url) {
     var faviconCaches = JSON.parse(localStorage.faviconCaches)
@@ -134,11 +131,28 @@ var controller = function (data) {
       scrollIntoViewIfNeeded(el)
     }
   }
+  ctrl.highlight = function (text, keyword) {
+    return _.map(text, function (char) {
+      keychar = keyword.substring(0, 1).toLowerCase()
+      const matched = keyword !== '' &&
+        char.toLowerCase() === keychar
+      if (matched) keyword = keyword.substring(1)
+      return {char, matched}
+    })
+  }
 
   initialize()
 }
 
 var view = function (ctrl) {
+  var highlight = function (text, keyword) {
+    var keyword = ctrl.keyword()
+    var highlighted = ctrl.highlight(text, keyword)
+    return _.map(highlighted, function (item) {
+      var tag = item.matched ? 'i' : 'span'
+      return m(tag, item.char)
+    })
+  }
   return [
     m('.container', {onkeydown: ctrl.nav, tabindex: '1'}, [
       m('form', {onsubmit: ctrl.open}, [
@@ -155,15 +169,17 @@ var view = function (ctrl) {
 
         return m('li.entry', {
           class: entryClasses,
-          onclick: ctrl.selectAndOpen(entry),
+          onmousedown: ctrl.select(entry),
+          onclick: ctrl.open,
           config: ctrl.scrollIntoViewIfNeeded(entry)
         }, [
           m('.title', {
             style: {
               'background-image': favicon ? 'url(' + favicon + ')' : 'none'
             }
-          }, entry.title),
-          m('.path', entry.path + entry.title)
+          }, highlight(entry.title)),
+          m('.path', highlight(entry.path + entry.title)),
+          m('.url', highlight(entry.url))
         ])
       }))
     ])

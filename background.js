@@ -54,9 +54,7 @@ var search = function (keyword) {
   var response = _.map(ENTRIES, dumpBookmarkEntry)
   var fuse = new Fuse(response, {
     shouldSort: true,
-    threshold: 0.6,
-    location: 0,
-    distance: 100,
+    tokenize: true,
     maxPatternLength: 32,
     keys: [
       {name: 'title', weight: 0.8},
