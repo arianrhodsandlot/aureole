@@ -169,16 +169,34 @@ var view = function (ctrl) {
           favicon = src
         })
 
+        var faIcon
+        switch (entry.type) {
+          case 'bookmark':
+            faIcon = 'fa-bookmark'
+            break
+          case 'history':
+            faIcon = 'fa-history'
+            break
+          case 'history':
+            faIcon = 'fa-folder'
+            break
+        }
+
         return m('li.entry', {
           class: entryClasses,
           onmousedown: ctrl.select(entry),
           onclick: ctrl.open,
           config: ctrl.scrollIntoViewIfNeeded(entry)
         }, [
-          m('img.favicon', {src: favicon}),
-          m('.title', highlight(entry.title)),
-          m('.path', highlight(entry.path || '' + entry.title)),
-          m('.url', highlight(entry.url))
+          m('.icons', [
+            m('img.favicon', {src: favicon}),
+            m(`i.type.fa.${faIcon}`)
+          ]),
+          m('.main', [
+            m('.title', highlight(entry.title)),
+            m('.path', highlight(entry.path || '' + entry.title)),
+            m('.url', highlight(entry.url))
+          ])
         ])
       }))
     ])

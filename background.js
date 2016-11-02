@@ -4,36 +4,35 @@ var CONFIG = {
   historySize: 100
 }
 
-var dumpBookmarkEntry = function (entry) {
-  var result = {type: 'bookmark'}
+var dumpBookmarkPathRecord = function (bookmarkPathRecord) {
+  var entry = {type: 'bookmark'}
   var path = '/'
-  _.each(entry, function (node) {
+  _.each(bookmarkPathRecord, function (node) {
     var title = node.title
 
     if (_.isUndefined(node.children)) {
       var url = node.url
-      result.title = title
-      result.url = url
+      entry.title = title
+      entry.url = url
     } else if (title) {
       path += title + '/'
     }
   })
-  result.path = path
-  return result
+  entry.path = path
+  return entry
 }
 var getBookmarks = function () {
-  var path = []
+  var bookmarkPathRecord = []
   var walk = function (nodes) {
     for (var node of nodes) {
-      path.push(node)
+      bookmarkPathRecord.push(node)
       if (node.children) {
         walk(node.children)
       } else {
-        var entry = _.clone(path)
-        entry = dumpBookmarkEntry(entry)
+        var entry = dumpBookmarkPathRecord(_.clone(bookmarkPathRecord))
         ENTRIES.push(entry)
       }
-      path.pop()
+      bookmarkPathRecord.pop()
     }
   }
 
@@ -45,20 +44,21 @@ var getBookmarks = function () {
   })
 }
 
-var dumpHistoryEntry = function (entry) {
-  var result = {type: 'history'}
-  result.title = entry.title
-  result.url = entry.url
-  return result
+var dumpHistoryItem = function (historyItem) {
+  var entry = {type: 'history'}
+  entry.title = historyItem.title
+  entry.url = historyItem.url
+  entry.path = ''
+  return entry
 }
 var getHistory = function () {
   return new Promise(function (resolve) {
     chrome.history.search({
       text: '', maxResults: CONFIG.historySize
-    }, function (results) {
-      _.forEach(results, function (result) {
-        var entry = dumpHistoryEntry(result)
-        ENTRIES.push(result)
+    }, function (historyItems) {
+      _.forEach(historyItems, function (historyItem) {
+        var entry = dumpHistoryItem(historyItem)
+        ENTRIES.push(entry)
       })
       resolve()
     })
@@ -66,7 +66,6 @@ var getHistory = function () {
 }
 
 var initialize = function () {
-  console.log(ENTRIES)
   var list = function () {
     var response = _.take(ENTRIES, CONFIG.resultsSize)
     return response

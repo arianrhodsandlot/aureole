@@ -41,11 +41,35 @@ form {
 .entry {
   padding: 6px 14px;
   cursor: pointer;
+  display: flex;
 }
 .entry.selected {
   background: #f0f0f0;
 }
-.entry i {
+
+.icons {
+  display: flex;
+  flex: 0 0 auto;
+  width: 16px;
+  flex-direction: column;
+  text-align: center;
+  margin: 0 10px 0 0;
+}
+.icons .type {
+  color: #aaa;
+  margin: 15px 0 0 0;
+}
+.favicon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+.entry .main{
+  flex: 1 0 auto;
+}
+.title i,
+.path i,
+.url i {
   font-weight: bold;
   font-style: normal;
 }
@@ -55,15 +79,8 @@ form {
   line-height: 1.2;
   overflow: hidden;
   width: 100%;
-  padding: 0 0 0 20px;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-.favicon {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-  margin: 0 0 -16px -2px;
 }
 .title {
   background-repeat: no-repeat;
