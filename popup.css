@@ -39,9 +39,9 @@ form {
   height: 360px;
 }
 .entry {
-  padding: 6px 14px;
+  padding: 6px 0;
   cursor: pointer;
-  display: flex;
+  overflow: hidden;
 }
 .entry.selected {
   background: #f0f0f0;
@@ -49,11 +49,11 @@ form {
 
 .icons {
   display: flex;
-  flex: 0 0 auto;
   width: 16px;
   flex-direction: column;
   text-align: center;
-  margin: 0 10px 0 0;
+  margin: 0 10px;
+  float: left;
 }
 .icons .type {
   color: #aaa;
@@ -65,7 +65,9 @@ form {
   object-fit: contain;
 }
 .entry .main{
-  flex: 1 0 auto;
+  float: left;
+  margin: 0 10px 0 0;
+  width: 420px;
 }
 .title i,
 .path i,

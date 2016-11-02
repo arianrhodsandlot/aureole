@@ -72,17 +72,7 @@ var initialize = function () {
   }
 
   var search = function (keyword) {
-    var fuse = new Fuse(ENTRIES, {
-      shouldSort: true,
-      tokenize: true,
-      maxPatternLength: 32,
-      keys: [
-        {name: 'title', weight: 0.8},
-        {name: 'url', weight: 0.7},
-        {name: 'path', weight: 0.1}
-      ]
-    })
-    response = fuse.search(keyword)
+    response = getEntriesIndex().search(keyword)
     response = _.take(response, CONFIG.resultsSize)
     return response
   }
@@ -104,8 +94,36 @@ var initialize = function () {
   })
 }
 
-Promise.all([
-  getBookmarks(),
-  getHistory()
-])
-.then(initialize)
+var updateEntries = function () {
+  return Promise.all([
+    getBookmarks(),
+    getHistory()
+  ])
+}
+
+var entrieIndex
+var updateEntriesIndex = function () {
+  entrieIndex = new Fuse(ENTRIES, {
+    shouldSort: true,
+    tokenize: true,
+    maxPatternLength: 32,
+    keys: [
+      {name: 'title', weight: 0.8},
+      {name: 'url', weight: 0.7},
+      {name: 'path', weight: 0.1}
+    ]
+  })
+}
+var getEntriesIndex = function () {
+  return entrieIndex
+}
+
+chrome.bookmarks.onCreated.addListener(updateEntries)
+chrome.bookmarks.onRemoved.addListener(updateEntries)
+chrome.bookmarks.onChanged.addListener(updateEntries)
+chrome.bookmarks.onMoved.addListener(updateEntries)
+chrome.bookmarks.onChildrenReordered.addListener(updateEntries)
+chrome.history.onVisited.addListener(updateEntries)
+chrome.history.onVisitRemoved.addListener(updateEntries)
+
+updateEntries().then(initialize)
