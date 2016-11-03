@@ -21,6 +21,7 @@ service.open = function (entry, target) {
   } else if (entry.type === 'tab') {
     chrome.tabs.update(entry.tabId, {active: true})
     chrome.windows.update(entry.windowId, {focused: true})
+    _.defer(close)
   } else {
     chrome.tabs.create({url: entry.url})
   }
@@ -67,7 +68,8 @@ var controller = function (data) {
   ctrl.entries = m.prop(null)
 
   ctrl.search = m.withAttr('value', initialize)
-  ctrl.open = function () {
+  ctrl.open = function (e) {
+    e.preventDefault()
     var target = 'self'
     service.open(selectedEntry, target)
   }
@@ -124,7 +126,7 @@ var controller = function (data) {
       })
       .then(_.identity, function () {
         var defaultGoogleFavicon = googleFaviconServer + '?domain=0'
-        return testImage(defaultFavicon)
+        return testImage(defaultGoogleFavicon)
       })
       .then(_.identity, function () {
         var defaultLocalFavicon = 'xxx'
