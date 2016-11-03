@@ -1,4 +1,4 @@
-var ENTRIES = []
+var ENTRIES
 var CONFIG = {
   resultsSize: 10,
   historySize: 100
@@ -95,10 +95,12 @@ var initialize = function () {
 }
 
 var updateEntries = function () {
+  console.log('Updating entries...')
+  ENTRIES = []
   return Promise.all([
     getBookmarks(),
     getHistory()
-  ])
+  ]).then(updateEntriesIndex)
 }
 
 var entrieIndex
@@ -118,12 +120,14 @@ var getEntriesIndex = function () {
   return entrieIndex
 }
 
-chrome.bookmarks.onCreated.addListener(updateEntries)
-chrome.bookmarks.onRemoved.addListener(updateEntries)
-chrome.bookmarks.onChanged.addListener(updateEntries)
-chrome.bookmarks.onMoved.addListener(updateEntries)
-chrome.bookmarks.onChildrenReordered.addListener(updateEntries)
-chrome.history.onVisited.addListener(updateEntries)
-chrome.history.onVisitRemoved.addListener(updateEntries)
+
+var updateEntriesLazy = _.debounce(updateEntries, 100)
+chrome.bookmarks.onCreated.addListener(updateEntriesLazy)
+chrome.bookmarks.onRemoved.addListener(updateEntriesLazy)
+chrome.bookmarks.onChanged.addListener(updateEntriesLazy)
+chrome.bookmarks.onMoved.addListener(updateEntriesLazy)
+chrome.bookmarks.onChildrenReordered.addListener(updateEntriesLazy)
+chrome.history.onVisited.addListener(updateEntriesLazy)
+chrome.history.onVisitRemoved.addListener(updateEntriesLazy)
 
 updateEntries().then(initialize)

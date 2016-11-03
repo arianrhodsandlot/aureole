@@ -146,7 +146,6 @@ var controller = function (data) {
 
 var view = function (ctrl) {
   var entries = ctrl.entries()
-  console.log(entries)
   var highlight = function (text, keyword) {
     var keyword = ctrl.keyword()
     var highlighted = ctrl.highlight(text, keyword)
@@ -172,7 +171,7 @@ var view = function (ctrl) {
         var faIcon
         switch (entry.type) {
           case 'bookmark':
-            faIcon = 'fa-bookmark'
+            faIcon = 'fa-star'
             break
           case 'history':
             faIcon = 'fa-history'
@@ -210,5 +209,7 @@ try {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-  m.mount(document.body, {controller, view})
+  _.defer(function () { // wait for popup window finish it's animation when in macOS
+    m.mount(document.getElementById('aureole'), {controller, view})
+  })
 })

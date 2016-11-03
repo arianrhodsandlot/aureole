@@ -7,7 +7,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 }
 html,
 body {
-  font-family: sans-serif;
+  font-family: arial, sans-serif;
   font-size: 14px;
   width: 500px;
   height: 400px;
@@ -15,6 +15,7 @@ body {
   padding: 0;
   outline: none;
   box-shadow: 0 0 10px #000;
+  -webkit-font-smoothing: antialiased;
 }
 form {
   position: relative;
@@ -74,10 +75,12 @@ form {
 .url i {
   font-weight: bold;
   font-style: normal;
+  color: #000;
 }
 .title,
 .path,
 .url {
+  color: #222;
   line-height: 1.2;
   overflow: hidden;
   width: 100%;
