@@ -1,4 +1,5 @@
-var service = function (message) {
+var service = {}
+var sendMessage = function (message) {
   var deferred = m.deferred()
   m.startComputation()
   chrome.runtime.sendMessage(message, function (response) {
@@ -9,13 +10,20 @@ var service = function (message) {
   return deferred.promise
 }
 service.list = function () {
-  return service({action: 'list'})
+  return sendMessage({action: 'list'})
 }
 service.search = function (keyword) {
-  return service({action: 'search', params: {keyword}})
+  return sendMessage({action: 'search', params: {keyword}})
 }
-service.open = function (url) {
-  return service({action: 'open', params: {url}})
+service.open = function (entry, target) {
+  if (entry.target === 'blank') {
+    chrome.tabs.create({url: entry.url})
+  } else if (entry.type === 'tab') {
+    chrome.tabs.update(entry.tabId, {active: true})
+    chrome.windows.update(entry.windowId, {focused: true})
+  } else {
+    chrome.tabs.create({url: entry.url})
+  }
 }
 
 var controller = function (data) {
@@ -59,7 +67,8 @@ var controller = function (data) {
 
   ctrl.search = m.withAttr('value', initialize)
   ctrl.open = function () {
-    service.open(selectedEntry.url)
+    var target = 'self'
+    service.open(selectedEntry, target)
   }
   ctrl.isSelected = function (entry) {
     return entry === selectedEntry
@@ -88,18 +97,23 @@ var controller = function (data) {
     }
     ctrl.select(entries[nextIndex])()
   }
-  ctrl.getFavicon = function (url) {
+  ctrl.getFavicon = function (entry) {
+    var deferred = m.deferred()
+    if (entry.favIconUrl) {
+      deferred.resolve(entry.favIconUrl)
+      m.redraw()
+      return deferred.promise
+    }
     var faviconCaches = JSON.parse(localStorage.faviconCaches)
     var domain = '0'
     var googleFaviconServer = 'https://www.google.com/s2/favicons'
-
+    var url = entry.url
     try {
       domain = new URL(url).origin
     } catch (e) {}
 
     var cachedFavicon = faviconCaches[domain]
     if (cachedFavicon) {
-      var deferred = m.deferred()
       deferred.resolve(cachedFavicon)
       m.redraw()
       return deferred.promise
@@ -118,9 +132,9 @@ var controller = function (data) {
         return defaultFavicon
       })
       .then(function (src) {
-        m.redraw()
         faviconCaches[domain] = src
         localStorage.faviconCaches = JSON.stringify(faviconCaches)
+        m.redraw()
         return src
       })
   }
@@ -164,7 +178,7 @@ var view = function (ctrl) {
         var favicon
 
         if (ctrl.isSelected(entry)) entryClasses += 'selected'
-        ctrl.getFavicon(entry.url).then(function (src) {
+        ctrl.getFavicon(entry).then(function (src) {
           favicon = src
         })
 
@@ -176,8 +190,8 @@ var view = function (ctrl) {
           case 'history':
             faIcon = 'fa-history'
             break
-          case 'history':
-            faIcon = 'fa-folder'
+          case 'tab':
+            faIcon = 'fa-folder-open'
             break
         }
 

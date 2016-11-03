@@ -22,6 +22,7 @@ var dumpBookmarkPathRecord = function (bookmarkPathRecord) {
   return entry
 }
 var getBookmarks = function () {
+  var bookmarks
   var bookmarkPathRecord = []
   var walk = function (nodes) {
     for (var node of nodes) {
@@ -65,6 +66,49 @@ var getHistory = function () {
   })
 }
 
+var dumpHistoryItem = function (historyItem) {
+  var entry = {type: 'history'}
+  entry.title = historyItem.title
+  entry.url = historyItem.url
+  entry.path = ''
+  return entry
+}
+var getHistory = function () {
+  return new Promise(function (resolve) {
+    chrome.history.search({
+      text: '', maxResults: CONFIG.historySize
+    }, function (historyItems) {
+      _.forEach(historyItems, function (historyItem) {
+        var entry = dumpHistoryItem(historyItem)
+        ENTRIES.push(entry)
+      })
+      resolve()
+    })
+  })
+}
+
+var dumpTab = function (tab) {
+  var entry = {type: 'tab'}
+  entry.title = tab.title
+  entry.url = tab.url
+  entry.favIconUrl = tab.favIconUrl
+  entry.path = ''
+  entry.tabId = tab.id
+  entry.windowId = tab.windowId
+  return entry
+}
+var getTabs = function () {
+  return new Promise(function (resolve) {
+    chrome.tabs.query({}, function (tabs) {
+      _.forEach(tabs, function (tab) {
+        var entry = dumpTab(tab)
+        ENTRIES.push(entry)
+      })
+      resolve()
+    })
+  })
+}
+
 var initialize = function () {
   var list = function () {
     var response = _.take(ENTRIES, CONFIG.resultsSize)
@@ -86,10 +130,6 @@ var initialize = function () {
       case 'search':
         sendJson(search(request.params.keyword))
         break
-      case 'open':
-        chrome.tabs.create({url: request.params.url})
-        sendJson(null)
-        break
     }
   })
 }
@@ -99,7 +139,8 @@ var updateEntries = function () {
   ENTRIES = []
   return Promise.all([
     getBookmarks(),
-    getHistory()
+    getHistory(),
+    getTabs()
   ]).then(updateEntriesIndex)
 }
 
