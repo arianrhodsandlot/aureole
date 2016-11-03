@@ -160,8 +160,10 @@ var controller = function (data) {
 
 var view = function (ctrl) {
   var entries = ctrl.entries()
-  var highlight = function (text, keyword) {
+  var highlight = function (text) {
+    if (!text) return '-'
     var keyword = ctrl.keyword()
+    if (!keyword) return text
     var highlighted = ctrl.highlight(text, keyword)
     return _.map(highlighted, function (item) {
       var tag = item.matched ? 'i' : 'span'

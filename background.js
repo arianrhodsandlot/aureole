@@ -22,7 +22,7 @@ var dumpBookmarkPathRecord = function (bookmarkPathRecord) {
   return entry
 }
 var getBookmarks = function () {
-  var bookmarks
+  var bookmarks = []
   var bookmarkPathRecord = []
   var walk = function (nodes) {
     for (var node of nodes) {
@@ -31,7 +31,7 @@ var getBookmarks = function () {
         walk(node.children)
       } else {
         var entry = dumpBookmarkPathRecord(_.clone(bookmarkPathRecord))
-        ENTRIES.push(entry)
+        bookmarks.push(entry)
       }
       bookmarkPathRecord.pop()
     }
@@ -40,7 +40,7 @@ var getBookmarks = function () {
   return new Promise(function (resolve) {
     chrome.bookmarks.getTree(function (tree) {
       walk(tree)
-      resolve()
+      resolve(bookmarks)
     })
   })
 }
@@ -54,35 +54,15 @@ var dumpHistoryItem = function (historyItem) {
 }
 var getHistory = function () {
   return new Promise(function (resolve) {
+    var history = []
     chrome.history.search({
       text: '', maxResults: CONFIG.historySize
     }, function (historyItems) {
       _.forEach(historyItems, function (historyItem) {
         var entry = dumpHistoryItem(historyItem)
-        ENTRIES.push(entry)
+        history.push(entry)
       })
-      resolve()
-    })
-  })
-}
-
-var dumpHistoryItem = function (historyItem) {
-  var entry = {type: 'history'}
-  entry.title = historyItem.title
-  entry.url = historyItem.url
-  entry.path = ''
-  return entry
-}
-var getHistory = function () {
-  return new Promise(function (resolve) {
-    chrome.history.search({
-      text: '', maxResults: CONFIG.historySize
-    }, function (historyItems) {
-      _.forEach(historyItems, function (historyItem) {
-        var entry = dumpHistoryItem(historyItem)
-        ENTRIES.push(entry)
-      })
-      resolve()
+      resolve(history)
     })
   })
 }
@@ -100,11 +80,7 @@ var dumpTab = function (tab) {
 var getTabs = function () {
   return new Promise(function (resolve) {
     chrome.tabs.query({}, function (tabs) {
-      _.forEach(tabs, function (tab) {
-        var entry = dumpTab(tab)
-        ENTRIES.push(entry)
-      })
-      resolve()
+      resolve(_.map(tabs, dumpTab))
     })
   })
 }
@@ -136,12 +112,17 @@ var initialize = function () {
 
 var updateEntries = function () {
   console.log('Updating entries...')
-  ENTRIES = []
+  var entries = {}
   return Promise.all([
-    getBookmarks(),
-    getHistory(),
-    getTabs()
-  ]).then(updateEntriesIndex)
+    getBookmarks().then(function (bookmarks) {entries.bookmarks = bookmarks}),
+    getHistory().then(function (history) {entries.history = history}),
+    getTabs().then(function (tabs) {entries.tabs = tabs})
+  ]).then(function () {
+    ENTRIES = entries.tabs
+      .concat(entries.history)
+      .concat(entries.bookmarks)
+    updateEntriesIndex()
+  })
 }
 
 var entrieIndex
