@@ -33,6 +33,7 @@ var controller = function (data) {
 
   var testImage = function (src) {
     var deferred = m.deferred()
+    if (!src) return deferred.reject().promise
     var img = new Image()
     img.src = src
     img.onload = function () {
@@ -99,11 +100,6 @@ var controller = function (data) {
   }
   ctrl.getFavicon = function (entry) {
     var deferred = m.deferred()
-    if (entry.favIconUrl) {
-      deferred.resolve(entry.favIconUrl)
-      m.redraw()
-      return deferred.promise
-    }
     var faviconCaches = JSON.parse(localStorage.faviconCaches)
     var domain = '0'
     var googleFaviconServer = 'https://www.google.com/s2/favicons'
@@ -119,7 +115,10 @@ var controller = function (data) {
       return deferred.promise
     }
 
-    return testImage(domain + '/favicon.ico')
+    return testImage(entry.favIconUrl)
+      .then(_.identity, function () {
+        return testImage(domain + '/favicon.ico')
+      })
       .then(_.identity, function () {
         return testImage(googleFaviconServer + '?domain=' + domain)
       })
