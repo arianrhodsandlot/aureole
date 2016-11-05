@@ -76,7 +76,6 @@ var dumpTab = function (tab) {
   entry.title = tab.title
   entry.url = tab.url
   entry.favIconUrl = tab.favIconUrl
-  entry.path = ''
   entry.tabId = tab.id
   entry.windowId = tab.windowId
   return entry

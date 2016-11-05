@@ -193,7 +193,6 @@ var view = function (ctrl) {
         })
 
         var faIconClassName
-        var entryInfo
         switch (entry.type) {
           case 'bookmark':
             faIconClassName = 'fa-star'
@@ -201,12 +200,22 @@ var view = function (ctrl) {
             break
           case 'history':
             faIconClassName = 'fa-history'
-            entryInfo = i18n('Last visit at ') + entry.lastVisitTime
             break
           case 'tab':
             faIconClassName = 'fa-folder-open'
-            entryInfo = i18n('Switch to this tab')
             break
+        }
+        var entryInfo = []
+        if (entry.path) {
+            entryInfo.push('Open ')
+            entryInfo.push(highlight(entry.path + entry.title))
+        }
+        if (entry.lastVisitTime) {
+            entryInfo.push(i18n('Last visit at '))
+            entryInfo.push(entry.lastVisitTime)
+        }
+        if (entry.type === 'tab') {
+            entryInfo.push(i18n('Switch to this tab'))
         }
 
 
