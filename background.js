@@ -52,7 +52,7 @@ var dumpHistoryItem = function (historyItem) {
   var entry = {type: 'history'}
   entry.title = historyItem.title
   entry.url = historyItem.url
-  entry.visitCount = historyItem.visitCount
+  entry.lastVisitTime = historyItem.lastVisitTime
   return entry
 }
 var getHistory = function () {
@@ -86,6 +86,37 @@ var getTabs = function () {
     chrome.tabs.query({}, function (currentTabs) {
       tabs = _.map(currentTabs.reverse(), dumpTab)
       resolve(tabs)
+    })
+  })
+}
+
+var updateEntries = function () {
+  ENTRIES = []
+  _.each(CONFIG.sort, function (type) {
+    var processingEntries
+    switch (type) {
+      case 'bookmark':
+        processingEntries = bookmarks
+        break
+      case 'history':
+        processingEntries = historyItems
+        break
+      case 'tab':
+        processingEntries = tabs
+        break
+    }
+    _.each(processingEntries, function (entry) {
+      var matchedEntries = _.filter(ENTRIES, function (entryAlreadySelected) {
+        return entryAlreadySelected.type !== entry.type
+          && entryAlreadySelected.url === entry.url
+      })
+      if (matchedEntries.length === 0) {
+        ENTRIES.push(entry)
+      } else {
+        _.each(matchedEntries, function (matchedEntry) {
+          matchedEntry = _.defaults(matchedEntry, entry)
+        })
+      }
     })
   })
 }
@@ -130,9 +161,7 @@ var updateEntriesByQueue = function () {
   })
   queue = []
   return Promise.all(updateTasks).then(function () {
-    ENTRIES = tabs
-      .concat(historyItems)
-      .concat(bookmarks)
+    updateEntries()
     updateEntriesSearchIndex()
     pending = false
   }, function () {

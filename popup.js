@@ -197,17 +197,15 @@ var view = function (ctrl) {
         switch (entry.type) {
           case 'bookmark':
             faIconClassName = 'fa-star'
-            entryInfo = highlight(entry.path + entry.title)
+            entryInfo = ['Open ', highlight(entry.path + entry.title)]
             break
           case 'history':
             faIconClassName = 'fa-history'
-            entryInfo = i18n('visit count: ') + entry.visitCount
+            entryInfo = i18n('Last visit at ') + entry.lastVisitTime
             break
           case 'tab':
             faIconClassName = 'fa-folder-open'
-            entryInfo = ctrl.isEntryInCurrentWindow(entry)
-              ? i18n('The tab is in the window you are using now.')
-              : i18n('The tab is in an other window.')
+            entryInfo = i18n('Switch to this tab')
             break
         }
 
@@ -217,17 +215,17 @@ var view = function (ctrl) {
           onmousedown: ctrl.select(entry),
           onclick: ctrl.open,
           config: ctrl.scrollIntoViewIfNeeded(entry)
-        }, [
+        }, m('a', {href: entry.url}, [
           m('.icons', [
             m('img.favicon', {src: favicon}),
             m(`i.type.fa.${faIconClassName}`)
           ]),
           m('.main', [
             m('.title', highlight(entry.title)),
-            m('.info', entryInfo),
-            m('.url', highlight(entry.url))
+            m('.url', highlight(entry.url)),
+            m('.info', entryInfo)
           ])
-        ])
+        ]))
       }))
     ])
   ]
