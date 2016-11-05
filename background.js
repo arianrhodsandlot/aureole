@@ -52,7 +52,7 @@ var dumpHistoryItem = function (historyItem) {
   var entry = {type: 'history'}
   entry.title = historyItem.title
   entry.url = historyItem.url
-  entry.path = ''
+  entry.visitCount = historyItem.visitCount
   return entry
 }
 var getHistory = function () {
@@ -111,7 +111,6 @@ var queue = []
 var updateTasks = []
 var pending = false
 var updateEntriesByQueue = function () {
-  console.log(pending, queue)
   if (pending) return new Promise(_.noop, _.constant('pending'))
   pending = true
   _.forEach(queue, function (type) {

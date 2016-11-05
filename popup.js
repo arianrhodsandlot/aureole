@@ -1,3 +1,5 @@
+var i18n = _.identity
+
 var service = {}
 var sendMessage = function (message) {
   var deferred = m.deferred()
@@ -155,6 +157,13 @@ var controller = function (data) {
       return {char, matched}
     })
   }
+  var currentWindowId
+  chrome.windows.getCurrent({}, function (window) {
+    currentWindowId = window.id
+  })
+  ctrl.isEntryInCurrentWindow = function (entry) {
+    return entry.windowId === currentWindowId
+  }
 
   initialize()
 }
@@ -185,18 +194,25 @@ var view = function (ctrl) {
           favicon = src
         })
 
-        var faIcon
+        var faIconClassName
+        var entryInfo
         switch (entry.type) {
           case 'bookmark':
-            faIcon = 'fa-star'
+            faIconClassName = 'fa-star'
+            entryInfo = highlight(entry.path + entry.title)
             break
           case 'history':
-            faIcon = 'fa-history'
+            faIconClassName = 'fa-history'
+            entryInfo = i18n('visit count: ') + entry.visitCount
             break
           case 'tab':
-            faIcon = 'fa-folder-open'
+            faIconClassName = 'fa-folder-open'
+            entryInfo = ctrl.isEntryInCurrentWindow(entry)
+              ? i18n('The tab is in the window you are using now.')
+              : i18n('The tab is in an other window.')
             break
         }
+
 
         return m('li.entry', {
           class: entryClasses,
@@ -206,11 +222,11 @@ var view = function (ctrl) {
         }, [
           m('.icons', [
             m('img.favicon', {src: favicon}),
-            m(`i.type.fa.${faIcon}`)
+            m(`i.type.fa.${faIconClassName}`)
           ]),
           m('.main', [
             m('.title', highlight(entry.title)),
-            m('.path', highlight(entry.path || '' + entry.title)),
+            m('.info', entryInfo),
             m('.url', highlight(entry.url))
           ])
         ])

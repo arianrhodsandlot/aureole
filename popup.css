@@ -71,14 +71,14 @@ form {
   width: 420px;
 }
 .title i,
-.path i,
+.info i,
 .url i {
   font-weight: bold;
   font-style: normal;
   color: #000;
 }
 .title,
-.path,
+.info,
 .url {
   color: #222;
   line-height: 1.2;
@@ -92,19 +92,22 @@ form {
   background-position: left center;
   background-size: contain;
 }
-.path,
+.info,
 .url {
-  font-size: 12px;
   margin: 6px 0 0 0;
+}
+.info {
+  font-size: 12px;
   color: #888;
 }
 .url {
-  font-family: monospace;
+  font-size: 13px;
+  color: #666;
 }
 .entry.selected .url {
   text-decoration: underline;
 }
-.path i,
+.info i,
 .url i {
   color: #555;
 }
