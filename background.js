@@ -1,9 +1,11 @@
 var ENTRIES
 var CONFIG = {
   resultsSize: 10,
-  historySize: 100
+  historySize: 100,
+  sort: ['tab', 'history', 'bookmark']
 }
 
+var bookmarks
 var dumpBookmarkPathRecord = function (bookmarkPathRecord) {
   var entry = {type: 'bookmark'}
   var path = '/'
@@ -22,7 +24,7 @@ var dumpBookmarkPathRecord = function (bookmarkPathRecord) {
   return entry
 }
 var getBookmarks = function () {
-  var bookmarks = []
+  bookmarks = []
   var bookmarkPathRecord = []
   var walk = function (nodes) {
     for (var node of nodes) {
@@ -45,6 +47,7 @@ var getBookmarks = function () {
   })
 }
 
+var historyItems
 var dumpHistoryItem = function (historyItem) {
   var entry = {type: 'history'}
   entry.title = historyItem.title
@@ -54,19 +57,20 @@ var dumpHistoryItem = function (historyItem) {
 }
 var getHistory = function () {
   return new Promise(function (resolve) {
-    var history = []
+    historyItems = []
     chrome.history.search({
       text: '', maxResults: CONFIG.historySize
-    }, function (historyItems) {
-      _.forEach(historyItems, function (historyItem) {
-        var entry = dumpHistoryItem(historyItem)
-        history.push(entry)
+    }, function (results) {
+      _.forEach(results, function (result) {
+        var entry = dumpHistoryItem(result)
+        historyItems.push(entry)
       })
-      resolve(history)
+      resolve(historyItems)
     })
   })
 }
 
+var tabs
 var dumpTab = function (tab) {
   var entry = {type: 'tab'}
   entry.title = tab.title
@@ -79,13 +83,95 @@ var dumpTab = function (tab) {
 }
 var getTabs = function () {
   return new Promise(function (resolve) {
-    chrome.tabs.query({}, function (tabs) {
-      resolve(_.map(tabs, dumpTab))
+    chrome.tabs.query({}, function (currentTabs) {
+      tabs = _.map(currentTabs.reverse(), dumpTab)
+      resolve(tabs)
     })
   })
 }
 
-var initialize = function () {
+var entrieIndex
+var updateEntriesSearchIndex = function () {
+  entrieIndex = new Fuse(ENTRIES, {
+    shouldSort: true,
+    tokenize: true,
+    maxPatternLength: 32,
+    keys: [
+      {name: 'title', weight: 0.8},
+      {name: 'url', weight: 0.7},
+      {name: 'path', weight: 0.1}
+    ]
+  })
+}
+var getEntriesIndex = function () {
+  return entrieIndex
+}
+
+var queue = []
+var updateTasks = []
+var pending = false
+var updateEntriesByQueue = function () {
+  console.log(pending, queue)
+  if (pending) return new Promise(_.noop, _.constant('pending'))
+  pending = true
+  _.forEach(queue, function (type) {
+    var updateCertainEntries
+    switch (type) {
+      case 'bookmark':
+        updateCertainEntries = getBookmarks
+        break
+      case 'history':
+        updateCertainEntries = getHistory
+        break
+      case 'tab':
+        updateCertainEntries = getTabs
+        break
+    }
+    updateTasks.push(updateCertainEntries())
+  })
+  queue = []
+  return Promise.all(updateTasks).then(function () {
+    ENTRIES = tabs
+      .concat(historyItems)
+      .concat(bookmarks)
+    updateEntriesSearchIndex()
+    pending = false
+  }, function () {
+    pending = false
+  })
+}
+var initAllEntries = function () {
+  queue = ['bookmark', 'history', 'tab']
+  return updateEntriesByQueue()
+}
+var updateEntriesByQueueLazy = _.debounce(updateEntriesByQueue, 500)
+var updateEntriesByTypeLazy = function (type) {
+  if (!_.includes(queue, type)) {
+    queue.push(type)
+  }
+  updateEntriesByQueueLazy()
+}
+var updateBookmarksEntriesLazy = _.partial(updateEntriesByTypeLazy, 'bookmark')
+var updateHistoryEntriesLazy = _.partial(updateEntriesByTypeLazy, 'history')
+var updatetabsEntriesLazy = _.partial(updateEntriesByTypeLazy, 'tab')
+
+chrome.bookmarks.onCreated.addListener(updateBookmarksEntriesLazy)
+chrome.bookmarks.onRemoved.addListener(updateBookmarksEntriesLazy)
+chrome.bookmarks.onChanged.addListener(updateBookmarksEntriesLazy)
+chrome.bookmarks.onMoved.addListener(updateBookmarksEntriesLazy)
+chrome.bookmarks.onChildrenReordered.addListener(updateBookmarksEntriesLazy)
+
+chrome.history.onVisited.addListener(updateHistoryEntriesLazy)
+chrome.history.onVisitRemoved.addListener(updateHistoryEntriesLazy)
+
+chrome.tabs.onUpdated.addListener(updatetabsEntriesLazy)
+chrome.tabs.onMoved.addListener(updatetabsEntriesLazy)
+chrome.tabs.onDetached.addListener(updatetabsEntriesLazy)
+chrome.tabs.onAttached.addListener(updatetabsEntriesLazy)
+chrome.tabs.onRemoved.addListener(updatetabsEntriesLazy)
+chrome.tabs.onReplaced.addListener(updatetabsEntriesLazy)
+
+initAllEntries().then(function initialize () {
   var list = function () {
     var response = _.take(ENTRIES, CONFIG.resultsSize)
     return response
@@ -108,55 +194,4 @@ var initialize = function () {
         break
     }
   })
-}
-
-var updateEntries = function () {
-  console.log('Updating entries...')
-  var entries = {}
-  return Promise.all([
-    getBookmarks().then(function (bookmarks) {entries.bookmarks = bookmarks}),
-    getHistory().then(function (history) {entries.history = history}),
-    getTabs().then(function (tabs) {entries.tabs = tabs})
-  ]).then(function () {
-    ENTRIES = entries.tabs
-      .concat(entries.history)
-      .concat(entries.bookmarks)
-    updateEntriesIndex()
-  })
-}
-
-var entrieIndex
-var updateEntriesIndex = function () {
-  entrieIndex = new Fuse(ENTRIES, {
-    shouldSort: true,
-    tokenize: true,
-    maxPatternLength: 32,
-    keys: [
-      {name: 'title', weight: 0.8},
-      {name: 'url', weight: 0.7},
-      {name: 'path', weight: 0.1}
-    ]
-  })
-}
-var getEntriesIndex = function () {
-  return entrieIndex
-}
-
-
-var updateEntriesLazy = _.debounce(updateEntries, 100)
-chrome.bookmarks.onCreated.addListener(updateEntriesLazy)
-chrome.bookmarks.onRemoved.addListener(updateEntriesLazy)
-chrome.bookmarks.onChanged.addListener(updateEntriesLazy)
-chrome.bookmarks.onMoved.addListener(updateEntriesLazy)
-chrome.bookmarks.onChildrenReordered.addListener(updateEntriesLazy)
-chrome.history.onVisited.addListener(updateEntriesLazy)
-chrome.history.onVisitRemoved.addListener(updateEntriesLazy)
-chrome.tabs.onCreated.addListener(updateEntriesLazy)
-chrome.tabs.onUpdated.addListener(updateEntriesLazy)
-chrome.tabs.onMoved.addListener(updateEntriesLazy)
-chrome.tabs.onDetached.addListener(updateEntriesLazy)
-chrome.tabs.onAttached.addListener(updateEntriesLazy)
-chrome.tabs.onRemoved.addListener(updateEntriesLazy)
-chrome.tabs.onReplaced.addListener(updateEntriesLazy)
-
-updateEntries().then(initialize)
+})
