@@ -1,6 +1,6 @@
 var i18n = _.identity
-// var defaultFavicon = 'https://www.google.com/s2/favicons?domain=0'
-var defaultFavicon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABs0lEQVR4AWL4//8/RRjO8Iucx+noO0O2qmlbUEnt5r3Juas+hsQD6KaG7dqCKPgx72Pe9GIY27btZBrbtm3btm0nO12D7tVXe63jqtqqU/iDw9K58sEruKkngH0DBljOE+T/qqx/Ln718RZOFasxyd3XRbWzlFMxRbgOTx9QWFzHtZlD+aqLb108sOAIAai6+NbHW7lUHaZkDFJt+wp1DG7R1d0b7Z88EOL08oXwjokcOvvUxYMjBFCamWP5KjKBjKOpZx2HEPj+Ieod26U+dpg6lK2CIwTQH0oECGT5eHj+IgSueJ5fPaPg6PZrz6DGHiGAISE7QPrIvIKVrSvCe2DNHSsehIDatOBna/+OEOgTQE6WAy1AAFiVcf6PhgCGxEvlA9QngLlAQCkLsNWhBZIDz/zg4ggmjHfYxoPGEMPZECW+zjwmFk6Ih194y7VHYGOPvEYlTAJlQwI4MEhgTOzZGiNalRpGgsOYFw5lEfTKybgfBtmuTNdI3MrOTAQmYf/DNcAwDeycVjROgZFt18gMso6V5Z8JpcEk2LPKpOAH0/4bKMCAYnuqm7cHOGHJTBRhAEJN9d/t5zCxAAAAAElFTkSuQmCC'
+// var defaultFavIcon = 'https://www.google.com/s2/favIcons?domain=0'
+var defaultFavIcon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABs0lEQVR4AWL4//8/RRjO8Iucx+noO0O2qmlbUEnt5r3Juas+hsQD6KaG7dqCKPgx72Pe9GIY27btZBrbtm3btm0nO12D7tVXe63jqtqqU/iDw9K58sEruKkngH0DBljOE+T/qqx/Ln718RZOFasxyd3XRbWzlFMxRbgOTx9QWFzHtZlD+aqLb108sOAIAai6+NbHW7lUHaZkDFJt+wp1DG7R1d0b7Z88EOL08oXwjokcOvvUxYMjBFCamWP5KjKBjKOpZx2HEPj+Ieod26U+dpg6lK2CIwTQH0oECGT5eHj+IgSueJ5fPaPg6PZrz6DGHiGAISE7QPrIvIKVrSvCe2DNHSsehIDatOBna/+OEOgTQE6WAy1AAFiVcf6PhgCGxEvlA9QngLlAQCkLsNWhBZIDz/zg4ggmjHfYxoPGEMPZECW+zjwmFk6Ih194y7VHYGOPvEYlTAJlQwI4MEhgTOzZGiNalRpGgsOYFw5lEfTKybgfBtmuTNdI3MrOTAQmYf/DNcAwDeycVjROgZFt18gMso6V5Z8JpcEk2LPKpOAH0/4bKMCAYnuqm7cHOGHJTBRhAEJN9d/t5zCxAAAAAElFTkSuQmCC'
 
 var service = {}
 var sendMessage = function (message) {
@@ -71,7 +71,8 @@ var controller = function (data) {
   ctrl.keyword = m.prop('')
   ctrl.entries = m.prop(null)
 
-  ctrl.search = m.withAttr('value', initialize)
+  var search = m.withAttr('value', initialize)
+  ctrl.search = _.debounce(search, 100)
   ctrl.open = function (e) {
     e.preventDefault()
     var target = 'self'
@@ -104,46 +105,56 @@ var controller = function (data) {
     }
     ctrl.select(entries[nextIndex])()
   }
-  ctrl.getFavicon = function (entry) {
-    var deferred = m.deferred()
-    var faviconCaches = JSON.parse(localStorage.faviconCaches)
-    var domain = '0'
-    var googleFaviconServer = 'https://www.google.com/s2/favicons'
-    var url = entry.url
-    try {
-      domain = new URL(url).origin
-    } catch (e) {}
 
-    var cachedFavicon = faviconCaches[domain]
-    if (cachedFavicon) {
-      deferred.resolve(cachedFavicon)
-      m.redraw()
-      return deferred.promise
-    }
+  var getCachedFavIconByDomain = function (domain) {
+    var favIconCaches = JSON.parse(localStorage.favIconCaches)
+    return favIconCaches[domain]
+  }
+  var setCachedFavIconByDomain = function (domain, favIconUrl) {
+    var favIconCaches = JSON.parse(localStorage.favIconCaches)
+    favIconCaches[domain] = favIconUrl
+    localStorage.favIconCaches = JSON.stringify(favIconCaches)
+  }
+  var testingDomains = []
+  var redrawLazy = _.debounce(m.redraw, 100)
+  var updateCachedFavIcon = function (domain, knownFavicon) {
+    if (_.includes(testingDomains, domain)) return
 
-    return testImage(entry.favIconUrl)
+    testingDomains.push(domain)
+    testImage(knownFavicon)
       .then(_.identity, function () {
         return testImage(domain + '/favicon.ico')
       })
       .then(_.identity, function () {
-        return testImage(googleFaviconServer + '?domain=' + domain)
+        var googleFavIconServer = 'https://www.google.com/s2/favicons'
+        return testImage(googleFavIconServer + '?domain=' + domain)
       })
-      .then(_.identity, function () {
-        return defaultFavicon
-      })
-      .then(function (src) {
-        faviconCaches[domain] = src
-        localStorage.faviconCaches = JSON.stringify(faviconCaches)
-        m.redraw()
-        return src
+      .then(_.identity, _.constant(defaultFavIcon))
+      .then(function (favIconUrl) {
+        setCachedFavIconByDomain(domain, favIconUrl)
+        _.pull(testingDomains, domain)
+        redrawLazy()
       })
   }
-  ctrl.scrollIntoViewIfNeeded = function (entry) {
-    return function (el) {
-      if (!ctrl.isSelected(entry)) return
-
-      scrollIntoViewIfNeeded(el)
+  var getDomainFromUrl = _.memoize(function (url) {
+    try {
+      return new URL(url).origin
+    } catch (e) {
+      return '0'
     }
+  })
+  ctrl.getFavIcon = function (entry) {
+    var deferred = m.deferred()
+    var domain = getDomainFromUrl(entry.url)
+
+    var cachedFavIcon = getCachedFavIconByDomain(domain)
+    if (cachedFavIcon) return cachedFavIcon
+
+    updateCachedFavIcon(domain, entry.favIconUrl)
+    return defaultFavIcon
+  }
+  ctrl.scrollIntoViewIfNeeded = function (entry) {
+    return ctrl.isSelected(entry) ? scrollIntoViewIfNeeded : _.noop
   }
   ctrl.highlight = function (text, keyword) {
     return _.map(text, function (char) {
@@ -155,8 +166,8 @@ var controller = function (data) {
     })
   }
   var currentWindowId
-  chrome.windows.getCurrent({}, function (window) {
-    currentWindowId = window.id
+  chrome.windows.getCurrent({}, function (win) {
+    currentWindowId = win.id
   })
   ctrl.isEntryInCurrentWindow = function (entry) {
     return entry.windowId === currentWindowId
@@ -182,15 +193,9 @@ var view = function (ctrl) {
       m('form', {onsubmit: ctrl.open}, [
         m('input.keyword', {autofocus: true, oninput: ctrl.search})
       ]),
-      m('ul.entries', _.map(entries, function (entry) {
+      m('ul.entries', _.map(entries, function (entry, i) {
         var entryClasses = ''
-        // var favicon = 'https://www.google.com/s2/favicons?domain=0'
-        var favicon = defaultFavicon
-
         if (ctrl.isSelected(entry)) entryClasses += 'selected'
-        ctrl.getFavicon(entry).then(function (src) {
-          favicon = src
-        })
 
         var faIconClassName
         switch (entry.type) {
@@ -218,7 +223,6 @@ var view = function (ctrl) {
             entryInfo.push(i18n('Switch to this tab'))
         }
 
-
         return m('li.entry', {
           class: entryClasses,
           onmousedown: ctrl.select(entry),
@@ -226,7 +230,7 @@ var view = function (ctrl) {
           config: ctrl.scrollIntoViewIfNeeded(entry)
         }, m('a', {href: entry.url}, [
           m('.icons', [
-            m('img.favicon', {src: favicon}),
+            m('img.favicon', {src: ctrl.getFavIcon(entry)}),
             m(`i.type.fa.${faIconClassName}`)
           ]),
           m('.main', [
@@ -241,9 +245,9 @@ var view = function (ctrl) {
 }
 
 try {
-  JSON.parse(localStorage.faviconCaches)
+  JSON.parse(localStorage.favIconCaches)
 } catch (e) {
-  localStorage.faviconCaches = JSON.stringify({})
+  localStorage.favIconCaches = JSON.stringify({})
 }
 
 document.addEventListener('DOMContentLoaded', function() {
