@@ -1,19 +1,17 @@
-var defaultConfig = {
+var CONFIG
+try {
+  CONFIG = JSON.parse(localStorage.CONFIG)
+} catch (e) {
+  CONFIG = {}
+}
+CONFIG = _.defaults(CONFIG, {
   historySize: 100,
   lang: navigator.userLanguage || navigator.language || 'en-US',
   resultsSize: 10,
   sort: ['tab', 'history', 'bookmark'],
   theme: 'light'
-}
-var config
-try {
-  config = JSON.parse(localStorage.config)
-} catch (e) {
-  config = {}
-}
-
-config = _.defaults(config, defaultConfig)
-localStorage.config = JSON.stringify(config)
+})
+localStorage.CONFIG = JSON.stringify(CONFIG)
 
 var ENTRIES
 
@@ -71,7 +69,7 @@ var getHistory = function () {
   return new Promise(function (resolve) {
     historyItems = []
     chrome.history.search({
-      text: '', maxResults: config.historySize
+      text: '', maxResults: CONFIG.historySize
     }, function (results) {
       _.forEach(results, function (result) {
         var entry = dumpHistoryItem(result)
@@ -103,7 +101,7 @@ var getTabs = function () {
 
 var updateEntries = function () {
   ENTRIES = []
-  _.each(config.sort, function (type) {
+  _.each(CONFIG.sort, function (type) {
     var processingEntries
     switch (type) {
       case 'bookmark':
@@ -213,13 +211,13 @@ chrome.tabs.onReplaced.addListener(updatetabsEntriesLazy)
 
 initAllEntries().then(function initialize () {
   var list = function () {
-    var response = _.take(ENTRIES, config.resultsSize)
+    var response = _.take(ENTRIES, CONFIG.resultsSize)
     return response
   }
 
   var search = function (keyword) {
     response = getEntriesIndex().search(keyword)
-    response = _.take(response, config.resultsSize)
+    response = _.take(response, CONFIG.resultsSize)
     return response
   }
 
