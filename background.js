@@ -103,7 +103,7 @@ var getTabs = function () {
 
 var updateEntries = function () {
   ENTRIES = []
-  _.each(CONFIG.sort, function (type) {
+  _.each(config.sort, function (type) {
     var processingEntries
     switch (type) {
       case 'bookmark':

@@ -204,10 +204,11 @@ var view = function (ctrl) {
         if (ctrl.isSelected(entry)) entryClasses += 'selected'
 
         var faIconClassName
+        var entryInfo
         switch (entry.type) {
           case 'bookmark':
             faIconClassName = 'fa-star'
-            entryInfo = ['Open ', highlight(entry.path + entry.title)]
+            entryInfo = highlight(entry.path + entry.title)
             break
           case 'history':
             faIconClassName = 'fa-history'
@@ -219,6 +220,9 @@ var view = function (ctrl) {
             break
           case 'tab':
             faIconClassName = 'fa-folder-open'
+            entryInfo = ctrl.isEntryInCurrentWindow(entry)
+              ? i18n('The tab is in the window you are using now.')
+              : i18n('The tab is in an other window.')
             break
         }
 
