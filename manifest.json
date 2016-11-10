@@ -9,15 +9,16 @@
   ],
   "background": {
     "scripts": [
-      "fuse.min.js",
-      "lodash.min.js",
+      "lib/fuse.min.js",
+      "lib/lodash.min.js",
       "background.js"
     ]
   },
+  "options_page": "options/options.html",
   "browser_action": {
       "default_title": "Aureole",
       "default_icon": "icon.png",
-      "default_popup": "popup.html"
+      "default_popup": "popup/popup.html"
   },
   "manifest_version": 2,
   "content_security_policy": "script-src 'self' https://unpkg.com; object-src 'self'",

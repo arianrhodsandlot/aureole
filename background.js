@@ -1,8 +1,9 @@
 var defaultConfig = {
-  resultsSize: 10,
   historySize: 100,
+  lang: navigator.userLanguage || navigator.language || 'en-US',
+  resultsSize: 10,
   sort: ['tab', 'history', 'bookmark'],
-  lang: navigator.userLanguage || navigator.language
+  theme: 'light'
 }
 var config
 try {
