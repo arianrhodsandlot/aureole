@@ -5,20 +5,16 @@
   "permissions": [
     "bookmarks",
     "history",
-    "tabs"
+    "tabs",
+    "storage"
   ],
   "background": {
     "scripts": [
-      "lib/fuse.min.js",
-      "lib/lodash.min.js",
+      "vendor/fuse.min.js",
+      "vendor/lodash.min.js",
       "background.js"
     ]
   },
-  "content_scripts": [{
-    "matches": ["*://*/*"],
-    "match_about_blank": true,
-    "js": ["inceptor.js"]
-  }],
   "options_page": "options/options.html",
   "browser_action": {
       "default_title": "Aureole",
@@ -26,13 +22,14 @@
       "default_popup": "popup/popup.html"
   },
   "manifest_version": 2,
-  "content_security_policy": "script-src 'self' https://unpkg.com; object-src 'self'",
   "commands": {
     "_execute_browser_action": {
+      "global": true,
+      "description": "Open Aureole",
       "suggested_key": {
-        "windows": "Ctrl+Shift+L",
+        "windows": "Ctrl+P",
         "mac": "Command+P",
-        "linux": "Ctrl+Shift+L"
+        "linux": "Ctrl+P"
       }
     }
   }

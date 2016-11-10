@@ -28,16 +28,16 @@ form {
   top: 0;
   display: block;
   width: 520px;
-  height: 40px;
+  height: 50px;
   margin: 0 0 0 -10px;
   padding: 10px 20px;
   background: transparent;
-  box-shadow: 0 0 20px #bbb;
+  box-shadow: 0 0 20px #ddd;
 }
 .entries {
   overflow: auto;
   width: 100%;
-  height: 360px;
+  height: 350px;
 }
 .entry {
   padding: 6px 0;
@@ -110,4 +110,40 @@ form {
 .info i,
 .url i {
   color: #555;
+}
+
+.no-matches {
+  color: #ccc;
+  text-align: center;
+  padding: 40px 0 0 0;
+  font-size: 20px;
+}
+
+.dark-theme {
+  background: #262626;
+  color: #9B9B9B;
+}
+
+.dark-theme .keyword {
+  color: #fff;
+  background: #242424;
+  box-shadow: 0 0 10px #111;
+  border-bottom: 1px solid #444;
+}
+
+.dark-theme .entry.selected {
+  background: #3a3a3a;
+}
+.dark-theme .title i,
+.dark-theme .info i,
+.dark-theme .url i {
+  color: #fff;
+}
+.dark-theme .title,
+.dark-theme .info,
+.dark-theme .url {
+  color: #ddd
+}
+.dark-theme .no-matches {
+  color: #666
 }

@@ -194,57 +194,62 @@ var view = function (ctrl) {
       return m(tag, item.char)
     })
   }
+
+  var entriesView = _.map(entries, function (entry, i) {
+    var entryClasses = ''
+    if (ctrl.isSelected(entry)) entryClasses += 'selected'
+
+    var faIconClassName
+    var entryInfo
+    switch (entry.type) {
+      case 'bookmark':
+        faIconClassName = 'fa-star'
+        entryInfo = highlight(entry.path + entry.title)
+        break
+      case 'history':
+        faIconClassName = 'fa-history'
+        if (entry.visitCount >= 3) {
+          entryInfo = i18n('You\'ve visited this page many times.')
+        } else {
+          entryInfo = i18n('You\'ve visited this page.')
+        }
+        break
+      case 'tab':
+        faIconClassName = 'fa-folder-open'
+        entryInfo = ctrl.isEntryInCurrentWindow(entry)
+          ? i18n('The tab is in the window you are using now.')
+          : i18n('The tab is in an other window.')
+        break
+    }
+
+    var highlightedUrl = highlight(entry.url)
+
+    return m('li.entry', {
+      class: entryClasses,
+      onmousedown: ctrl.select(entry),
+      onclick: ctrl.open,
+      config: ctrl.scrollIntoViewIfNeeded(entry)
+    }, m('a', {href: entry.url}, [
+      m('.icons', [
+        m('img.favicon', {src: ctrl.getFavIcon(entry)}),
+        m(`i.type.fa.${faIconClassName}`)
+      ]),
+      m('.main', [
+        m('.title', entry.title ? highlight(entry.title) : highlightedUrl),
+        m('.url', highlightedUrl),
+        m('.info', entryInfo)
+      ])
+    ]))
+  })
+
+  var noMatchesView = m('.no-matches', i18n('No matches found...'))
+
   return [
-    m('.container', {onkeydown: ctrl.nav, tabindex: '1'}, [
+    m('.container.' + config.theme + '-theme', {onkeydown: ctrl.nav, tabindex: '1'}, [
       m('form', {onsubmit: ctrl.open}, [
         m('input.keyword', {autofocus: true, oninput: ctrl.search})
       ]),
-      m('ul.entries', _.map(entries, function (entry, i) {
-        var entryClasses = ''
-        if (ctrl.isSelected(entry)) entryClasses += 'selected'
-
-        var faIconClassName
-        var entryInfo
-        switch (entry.type) {
-          case 'bookmark':
-            faIconClassName = 'fa-star'
-            entryInfo = highlight(entry.path + entry.title)
-            break
-          case 'history':
-            faIconClassName = 'fa-history'
-            if (entry.visitCount >= 3) {
-              entryInfo = i18n('You\'ve visited this page many times.')
-            } else {
-              entryInfo = i18n('You\'ve visited this page.')
-            }
-            break
-          case 'tab':
-            faIconClassName = 'fa-folder-open'
-            entryInfo = ctrl.isEntryInCurrentWindow(entry)
-              ? i18n('The tab is in the window you are using now.')
-              : i18n('The tab is in an other window.')
-            break
-        }
-
-        var highlightedUrl = highlight(entry.url)
-
-        return m('li.entry', {
-          class: entryClasses,
-          onmousedown: ctrl.select(entry),
-          onclick: ctrl.open,
-          config: ctrl.scrollIntoViewIfNeeded(entry)
-        }, m('a', {href: entry.url}, [
-          m('.icons', [
-            m('img.favicon', {src: ctrl.getFavIcon(entry)}),
-            m(`i.type.fa.${faIconClassName}`)
-          ]),
-          m('.main', [
-            m('.title', entry.title ? highlight(entry.title) : highlightedUrl),
-            m('.url', highlightedUrl),
-            m('.info', entryInfo)
-          ])
-        ]))
-      }))
+      m('ul.entries', _.isEmpty(entries) ? noMatchesView : entriesView)
     ])
   ]
 }
