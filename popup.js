@@ -1,6 +1,12 @@
-var i18n = _.identity
 // var defaultFavIcon = 'https://www.google.com/s2/favIcons?domain=0'
 var defaultFavIcon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABs0lEQVR4AWL4//8/RRjO8Iucx+noO0O2qmlbUEnt5r3Juas+hsQD6KaG7dqCKPgx72Pe9GIY27btZBrbtm3btm0nO12D7tVXe63jqtqqU/iDw9K58sEruKkngH0DBljOE+T/qqx/Ln718RZOFasxyd3XRbWzlFMxRbgOTx9QWFzHtZlD+aqLb108sOAIAai6+NbHW7lUHaZkDFJt+wp1DG7R1d0b7Z88EOL08oXwjokcOvvUxYMjBFCamWP5KjKBjKOpZx2HEPj+Ieod26U+dpg6lK2CIwTQH0oECGT5eHj+IgSueJ5fPaPg6PZrz6DGHiGAISE7QPrIvIKVrSvCe2DNHSsehIDatOBna/+OEOgTQE6WAy1AAFiVcf6PhgCGxEvlA9QngLlAQCkLsNWhBZIDz/zg4ggmjHfYxoPGEMPZECW+zjwmFk6Ih194y7VHYGOPvEYlTAJlQwI4MEhgTOzZGiNalRpGgsOYFw5lEfTKybgfBtmuTNdI3MrOTAQmYf/DNcAwDeycVjROgZFt18gMso6V5Z8JpcEk2LPKpOAH0/4bKMCAYnuqm7cHOGHJTBRhAEJN9d/t5zCxAAAAAElFTkSuQmCC'
+
+var config
+try {
+  config = JSON.parse(localStorage.config)
+} catch (e) {
+  config = {}
+}
 
 var service = {}
 var sendMessage = function (message) {
@@ -179,7 +185,7 @@ var controller = function (data) {
 var view = function (ctrl) {
   var entries = ctrl.entries()
   var highlight = function (text) {
-    if (!text) return '-'
+    if (!text) return ''
     var keyword = ctrl.keyword()
     if (!keyword) return text
     var highlighted = ctrl.highlight(text, keyword)
@@ -205,23 +211,18 @@ var view = function (ctrl) {
             break
           case 'history':
             faIconClassName = 'fa-history'
+            if (entry.visitCount >= 3) {
+              entryInfo = i18n('You\'ve visited this page many times.')
+            } else {
+              entryInfo = i18n('You\'ve visited this page.')
+            }
             break
           case 'tab':
             faIconClassName = 'fa-folder-open'
             break
         }
-        var entryInfo = []
-        if (entry.path) {
-            entryInfo.push('Open ')
-            entryInfo.push(highlight(entry.path + entry.title))
-        }
-        if (entry.lastVisitTime) {
-            entryInfo.push(i18n('Last visit at '))
-            entryInfo.push(entry.lastVisitTime)
-        }
-        if (entry.type === 'tab') {
-            entryInfo.push(i18n('Switch to this tab'))
-        }
+
+        var highlightedUrl = highlight(entry.url)
 
         return m('li.entry', {
           class: entryClasses,
@@ -234,8 +235,8 @@ var view = function (ctrl) {
             m(`i.type.fa.${faIconClassName}`)
           ]),
           m('.main', [
-            m('.title', highlight(entry.title)),
-            m('.url', highlight(entry.url)),
+            m('.title', entry.title ? highlight(entry.title) : highlightedUrl),
+            m('.url', highlightedUrl),
             m('.info', entryInfo)
           ])
         ]))

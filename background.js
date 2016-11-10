@@ -1,9 +1,20 @@
-var ENTRIES
-var CONFIG = {
+var defaultConfig = {
   resultsSize: 10,
   historySize: 100,
-  sort: ['tab', 'history', 'bookmark']
+  sort: ['tab', 'history', 'bookmark'],
+  lang: navigator.userLanguage || navigator.language
 }
+var config
+try {
+  config = JSON.parse(localStorage.config)
+} catch (e) {
+  config = {}
+}
+
+config = _.defaults(config, defaultConfig)
+localStorage.config = JSON.stringify(config)
+
+var ENTRIES
 
 var bookmarks
 var dumpBookmarkPathRecord = function (bookmarkPathRecord) {
@@ -59,7 +70,7 @@ var getHistory = function () {
   return new Promise(function (resolve) {
     historyItems = []
     chrome.history.search({
-      text: '', maxResults: CONFIG.historySize
+      text: '', maxResults: config.historySize
     }, function (results) {
       _.forEach(results, function (result) {
         var entry = dumpHistoryItem(result)
@@ -163,8 +174,9 @@ var updateEntriesByQueue = function () {
     updateEntries()
     updateEntriesSearchIndex()
     pending = false
-  }, function () {
+  }, function (e) {
     pending = false
+    throw e
   })
 }
 var initAllEntries = function () {
@@ -200,13 +212,13 @@ chrome.tabs.onReplaced.addListener(updatetabsEntriesLazy)
 
 initAllEntries().then(function initialize () {
   var list = function () {
-    var response = _.take(ENTRIES, CONFIG.resultsSize)
+    var response = _.take(ENTRIES, config.resultsSize)
     return response
   }
 
   var search = function (keyword) {
     response = getEntriesIndex().search(keyword)
-    response = _.take(response, CONFIG.resultsSize)
+    response = _.take(response, config.resultsSize)
     return response
   }
 
