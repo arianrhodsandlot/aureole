@@ -63,7 +63,7 @@ h3 {
 }
 .content {
   padding: 20px 10px 0 10px;
-  line-height: 2;
+  line-height: 2.4;
 }
 .row {
   margin: 0 0 10px 0;
@@ -81,6 +81,7 @@ select {
   color: #444;
   font: inherit;
   margin: 0 1px 0 0;
+  line-height: 1;
   outline: none;
   text-shadow: 0 1px 0 rgb(240, 240, 240);
   padding: 1px 24px 1px 10px;
