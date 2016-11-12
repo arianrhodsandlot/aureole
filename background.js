@@ -6,7 +6,7 @@ try {
 }
 CONFIG = _.defaults(CONFIG, {
   historySize: 100,
-  lang: navigator.userLanguage || navigator.language || 'en-US',
+  lang: ‘’,
   resultsSize: 10,
   sort: ['tab', 'history', 'bookmark'],
   theme: 'light'
