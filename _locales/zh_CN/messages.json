@@ -1,0 +1,86 @@
+{
+  "colon": {
+    "message": "："
+  },
+  "comma": {
+    "message": "，"
+  },
+  "period": {
+    "message": "。"
+  },
+  "semi": {
+    "message": "；"
+  },
+  "ABOUT": {
+    "message": "关于"
+  },
+  "AUTO_DETECT": {
+    "message": "自动检测"
+  },
+  "DARK": {
+    "message": "暗色"
+  },
+  "LIGHT": {
+    "message": "亮色"
+  },
+  "SETTINGS": {
+    "message": "选项"
+  },
+  "THEME": {
+    "message": "主题"
+  },
+  "THE_TAB_IS_IN_AN_OTHER_WINDOW": {
+    "message": "该标签位于其它窗口中"
+  },
+  "THE_TAB_IS_IN_THE_WINDOW_YOU_ARE_USING_NOW": {
+    "message": "该标签位于当前窗口中"
+  },
+  "WELCOME": {
+    "message": "欢迎"
+  },
+  "YOU_VE_VISITED_THIS_PAGE_MANY_TIMES": {
+    "message": "你访问过该网页很多次"
+  },
+  "YOU_VE_VISITED_THIS_PAGE": {
+    "message": "你曾访问过该网页"
+  },
+  "A_SUPER_NAVIGATOR_FOR_YOUR_BROWSER": {
+    "message": "浏览器的超级导航"
+  },
+  "VERSION": {
+    "message": "版本"
+  },
+  "VERSION": {
+    "message": "版本"
+  },
+  "AUREOLE_IS_AN_OPEN_SOURCE_SOFTWARE": {
+    "message": "Aureole是一个开源软件"
+  },
+  "THANKS_FOR_INSTALLING_AUREOLE": {
+    "message": "感谢安装Aureole"
+  },
+  "AUREOLE_IS": {
+    "message": "Aureole是一个为你的浏览器带来Sublime Text的“Ctrl + P”功能的浏览器扩展程序"
+  },
+  "WITH_AUREOLE": {
+    "message": "有了Aureole，你可以快速地在你的书签、浏览历史和打开的标签页间切换"
+  },
+  "OPEN": {
+    "message": "打开"
+  },
+  "SCROLL_TO": {
+    "message": "滚动到这一页地底部，点击“键盘快捷键”"
+  },
+  "ENTER_CTRL_P": {
+    "message": "输入“Ctrl + P”至位于”Aureole“后的输入区"
+  },
+  "ATTENTION": {
+    "message": "注意"
+  },
+  "WARNING_OF_ENABLE_CTRL_P": {
+    "message": "你的浏览器可能会将Ctrl + P作为打印的快捷键。要将Ctrl + P设为Aureole的快捷键，请按下面的步骤操作。"
+  },
+  "NO_MATCHES": {
+    "message": "没有相应结果……"
+  }
+}

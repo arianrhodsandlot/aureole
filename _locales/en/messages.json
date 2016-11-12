@@ -1,0 +1,80 @@
+{
+  "colon": {
+    "message": ":"
+  },
+  "comma": {
+    "message": ","
+  },
+  "period": {
+    "message": "."
+  },
+  "semi": {
+    "message": ";"
+  },
+  "ABOUT": {
+    "message": "About"
+  },
+  "AUTO_DETECT": {
+    "message": "Auto Detect"
+  },
+  "DARK": {
+    "message": "Dark"
+  },
+  "LIGHT": {
+    "message": "Light"
+  },
+  "SETTINGS": {
+    "message": "Settings"
+  },
+  "THEME": {
+    "message": "Theme"
+  },
+  "THE_TAB_IS_IN_AN_OTHER_WINDOW": {
+    "message": "The tab is in an other window"
+  },
+  "THE_TAB_IS_IN_THE_WINDOW_YOU_ARE_USING_NOW": {
+    "message": "The tab is in the window you are using now"
+  },
+  "WELCOME": {
+    "message": "Welcome"
+  },
+  "YOU_VE_VISITED_THIS_PAGE_MANY_TIMES": {
+    "message": "You've visited this page many times"
+  },
+  "YOU_VE_VISITED_THIS_PAGE": {
+    "message": "You've visited this page"
+  },
+  "A_SUPER_NAVIGATOR_FOR_YOUR_BROWSER": {
+    "message": "A Super Navigator for Your Browser"
+  },
+  "VERSION": {
+    "message": "Version"
+  },
+  "AUREOLE_IS_AN_OPEN_SOURCE_SOFTWARE": {
+    "message": "Aureole是一个开源软件"
+  },
+  "AUREOLE_IS": {
+    "message": "Aureole is an extention which brings Sublime Text's \"Ctrl + P\" to your browser"
+  },
+  "WITH_AUREOLE": {
+    "message": "With Aureole, you can quickly switch between your bookmarks, your browsing history, and opening tabs"
+  },
+  "OPEN": {
+    "message": "Open "
+  },
+  "SCROLL_TO": {
+    "message": "Scroll to the bottom of that page and click short cuts"
+  },
+  "ENTER_CTRL_P": {
+    "message": "Enter Ctrl + P into the input area after \"Aureole\""
+  },
+  "ATTENTION": {
+    "message": "ATTENTION"
+  },
+  "WARNING_OF_ENABLE_CTRL_P": {
+    "message": "Your browser may use Ctrl + P as a short cut for printing. To enable Ctrl + P for Aureole, follow steps showing bellow', '.')"
+  },
+  "NO_MATCHES": {
+    "message": "No matches found..."
+  }
+}

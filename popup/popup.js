@@ -207,18 +207,18 @@ var view = function (ctrl) {
         entryInfo = highlight(entry.path + entry.title)
         break
       case 'history':
-        faIconClassName = 'fa-history'
+        faIconClassName = 'fa-clock-o'
         if (entry.visitCount >= 3) {
-          entryInfo = i18n('You\'ve visited this page many times.')
+          entryInfo = i18n('YOU_VE_VISITED_THIS_PAGE_MANY_TIMES')
         } else {
-          entryInfo = i18n('You\'ve visited this page.')
+          entryInfo = i18n('YOU_VE_VISITED_THIS_PAGE')
         }
         break
       case 'tab':
         faIconClassName = 'fa-folder-open'
         entryInfo = ctrl.isEntryInCurrentWindow(entry)
-          ? i18n('The tab is in the window you are using now.')
-          : i18n('The tab is in an other window.')
+          ? i18n('THE_TAB_IS_IN_THE_WINDOW_YOU_ARE_USING_NOW')
+          : i18n('THE_TAB_IS_IN_AN_OTHER_WINDOW')
         break
     }
 
@@ -242,7 +242,7 @@ var view = function (ctrl) {
     ]))
   })
 
-  var noMatchesView = m('.no-matches', i18n('No matches found...'))
+  var noMatchesView = m('.no-matches', i18n('NO_MATCHES'))
 
   return [
     m('.container.' + CONFIG.theme + '-theme', {onkeydown: ctrl.nav, tabindex: '1'}, [

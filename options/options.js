@@ -46,17 +46,20 @@ document.addEventListener('DOMContentLoaded', function() {
         return [
           getAsideView(),
           getMainView([
-            m('h3', i18n('Welcome')),
+            m('h3', i18n('WELCOME')),
             m('.content', [
-              m('.thanks', i18n('Thanks for installing Aureole', '!')),
+              m('.thanks', i18n('THANKS_FOR_INSTALLING_AUREOLE', '.')),
               m('.overview', [
-                m('p', i18n('Aureole is an extention which brings Sublime Text\'s "Ctrl + P" to your browser', '.')),
-                m('p', i18n('With Aureole, you can quickly switch between your bookmarks, your browsing history, and opening tabs', '.'))
+                m('p', i18n('AUREOLE_IS', '.')),
+                m('p', i18n('WITH_AUREOLE', '.'))
               ]),
-              m('.howtouse', i18n('IMPORTANT: Your browser may use Ctrl + P as a short cut for printing. To enable Ctrl + P for Aureole, follow steps showing bellow', '.')),
+              m('.howtouse', [
+                m('b', i18n('ATTENTION', ':')),
+                i18n('WARNING_OF_ENABLE_CTRL_P')
+              ]),
               m('ol.steps', [
                 m('li.step', [
-                  i18n('Open '),
+                  i18n('OPEN'),
                   m('a', {
                     href: 'chrome://extensions/',
                     target: '_blank',
@@ -64,8 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
                   }, 'chrome://extensions/'),
                   i18n(';')
                 ]),
-                m('li.step', i18n('Scroll to the bottom of the page and click short cuts', ';')),
-                m('li.step', i18n('Enter Ctrl + P into the input area after "Aureole"', '.')),
+                m('li.step', i18n('SCROLL_TO', ';')),
+                m('li.step', i18n('ENTER_CTRL_P', '.')),
               ])
             ])
           ])
@@ -85,36 +88,21 @@ document.addEventListener('DOMContentLoaded', function() {
         ctrl.updateTheme = function (theme) {
           updateConfig('theme', theme)
         }
-
-        ctrl.updateLanguage = function (language) {
-          updateConfig('lang', language)
-        }
       },
       view: function (ctrl) {
         return [
           getAsideView(),
           getMainView([
-            m('h3', i18n('Settings')),
+            m('h3', i18n('SETTINGS')),
             m('.content', [
               m('.row', [
-                m('label', i18n('Theme', ':')),
+                m('label', i18n('THEME', ':')),
                 m('select', {
                   onchange: m.withAttr('value', ctrl.updateTheme),
                   value: CONFIG.theme
                 }, [
-                  m('option', {value: 'light'}, i18n('Light')),
-                  m('option', {value: 'dark'}, i18n('Dark'))
-                ])
-              ]),
-              m('.row', [
-                m('label', i18n('Language', ':')),
-                m('select', {
-                  onchange: m.withAttr('value', ctrl.updateLanguage),
-                  value: CONFIG.lang
-                }, [
-                  m('option', {value: ''}, i18n('Auto Detect')),
-                  m('option', {value: 'en-US'}, 'English'),
-                  m('option', {value: 'zh-CN'}, '简体中文')
+                  m('option', {value: 'light'}, i18n('LIGHT')),
+                  m('option', {value: 'dark'}, i18n('DARK'))
                 ])
               ])
             ])
@@ -127,13 +115,13 @@ document.addEventListener('DOMContentLoaded', function() {
         return [
           getAsideView(),
           getMainView([
-            m('h3', i18n('About')),
+            m('h3', i18n('ABOUT')),
             m('.content', [
               m('img', {src:''}),
               m('h4', 'Aureole'),
-              m('.info', i18n('A Super Navigator For Your Browser')),
-              m('.version', i18n('Version', ':') + '1.0.0'),
-              m('.open-source', m('span', i18n('Aureole is an open-source software.')))
+              m('.info', i18n('A_SUPER_NAVIGATOR_FOR_YOUR_BROWSER')),
+              m('.version', i18n('VERSION', ':') + '1.0.0'),
+              m('.open-source', m('span', i18n('AUREOLE_IS_AN_OPEN_SOURCE_SOFTWARE', '.')))
             ])
           ])
         ]
