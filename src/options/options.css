@@ -21,6 +21,9 @@ h1 {
   font-size: 18px;
   padding:20px;
 }
+a {
+  color: rgb(17, 85, 204);
+}
 
 @keyframes show {
   from {

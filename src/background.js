@@ -209,6 +209,12 @@ var initialize = function () {
         break
     }
   })
+
+  if (!localStorage.installedAt) {
+    chrome.tabs.create({url: "options/options.html?welcome"}, function () {
+      localStorage.installedAt = _.now()
+    })
+  }
 }
 
 chrome.bookmarks.onCreated.addListener(updateBookmarksEntriesLazy)
