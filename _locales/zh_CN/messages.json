@@ -20,6 +20,12 @@
   "DARK": {
     "message": "暗色"
   },
+  "GET_SOURCE": {
+    "message": "你可以在"
+  },
+  "GET_SOURCE_TRAILING_WORDS": {
+    "message": "找到其源代码"
+  },
   "LIGHT": {
     "message": "亮色"
   },

@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       },
       view: function (ctrl) {
+        var needShowAttention = navigator.userAgent.toLowerCase().indexOf('mac os x') === -1
         return [
           getAsideView(),
           getMainView([
@@ -53,23 +54,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 m('p', i18n('AUREOLE_IS', '.')),
                 m('p', i18n('WITH_AUREOLE', '.'))
               ]),
-              m('.howtouse', [
-                m('b', i18n('ATTENTION', ':')),
-                i18n('WARNING_OF_ENABLE_CTRL_P')
-              ]),
-              m('ol.steps', [
-                m('li.step', [
-                  i18n('OPEN'),
-                  m('a', {
-                    href: 'chrome://extensions/',
-                    target: '_blank',
-                    onclick: ctrl.openChromeExtentionsPage
-                  }, 'chrome://extensions/'),
-                  i18n(';')
+              needShowAttention ?
+              m('div', [
+                m('.howtouse', [
+                  m('b', i18n('ATTENTION', ':')),
+                  i18n('WARNING_OF_ENABLE_CTRL_P')
                 ]),
-                m('li.step', i18n('SCROLL_TO', ';')),
-                m('li.step', i18n('ENTER_CTRL_P', '.')),
+                m('ol.steps', [
+                  m('li.step', [
+                    i18n('OPEN'),
+                    m('a', {
+                      href: 'chrome://extensions/',
+                      target: '_blank',
+                      onclick: ctrl.openChromeExtentionsPage
+                    }, 'chrome://extensions/'),
+                    i18n(';')
+                  ]),
+                  m('li.step', i18n('SCROLL_TO', ';')),
+                  m('li.step', i18n('ENTER_CTRL_P', '.')),
+                ])
               ])
+              : null
             ])
           ])
         ]
@@ -118,10 +123,20 @@ document.addEventListener('DOMContentLoaded', function() {
             m('h3', i18n('ABOUT')),
             m('.content', [
               m('img', {src:''}),
-              m('h4', 'Aureole'),
-              m('.info', i18n('A_SUPER_NAVIGATOR_FOR_YOUR_BROWSER')),
+              m('h4', [
+                'Aureole',
+                ' - ',
+                m('span.info', i18n('A_SUPER_NAVIGATOR_FOR_YOUR_BROWSER'))
+              ]),
               m('.version', i18n('VERSION', ':') + '1.0.0'),
-              m('.open-source', m('span', i18n('AUREOLE_IS_AN_OPEN_SOURCE_SOFTWARE', '.')))
+              m('.open-source', [
+                m('span', i18n('AUREOLE_IS_AN_OPEN_SOURCE_SOFTWARE', '.')),
+                m('span', [
+                  i18n('GET_SOURCE'),
+                  m('a', {href: 'http://github.com/arianrhodsandlot/Aureole'}, 'GitHub'),
+                  i18n('GET_SOURCE_TRAILING_WORDS', '.')
+                ])
+              ])
             ])
           ])
         ]

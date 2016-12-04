@@ -95,3 +95,26 @@ select {
 select:focus {
   border-color: #4d90fe
 }
+.overview {
+  margin: 10px 0 0 0;
+  font-size: 12px;
+}
+.howtouse {
+  margin: 20px 0 0 0;
+}
+.howtouse b {
+  font-weight: bold;
+}
+.steps {
+  list-style: decimal;
+  padding: 10px 0 0 15px;
+}
+h4 {
+  font-size: 16px;
+}
+.version {
+  font-size: 12px;
+}
+.open-source {
+  margin: 20px 0 0 0;
+}

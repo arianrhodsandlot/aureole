@@ -20,6 +20,12 @@
   "DARK": {
     "message": "Dark"
   },
+  "GET_SOURCE": {
+    "message": "You can get it's source from "
+  },
+  "GET_SOURCE_TRAILING_WORDS": {
+    "message": ""
+  },
   "LIGHT": {
     "message": "Light"
   },
