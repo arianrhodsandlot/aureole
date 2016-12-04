@@ -68,7 +68,7 @@ h3 {
 .row {
   margin: 0 0 10px 0;
 }
-label {
+.theme-label {
   display: inline-block;
   width: 80px;
 }

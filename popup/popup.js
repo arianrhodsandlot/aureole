@@ -26,15 +26,15 @@ service.search = function (keyword) {
   return sendMessage({action: 'search', params: {keyword}})
 }
 service.open = function (entry, target) {
-  if (entry.target === 'blank') {
+  if (target === 'blank') {
     chrome.tabs.create({url: entry.url})
   } else if (entry.type === 'tab') {
     chrome.tabs.update(entry.tabId, {active: true})
     chrome.windows.update(entry.windowId, {focused: true})
-    _.defer(close)
   } else {
-    chrome.tabs.create({url: entry.url})
+    chrome.tabs.update({url: entry.url})
   }
+  _.defer(close)
 }
 
 var controller = function (data) {
@@ -81,7 +81,15 @@ var controller = function (data) {
   ctrl.search = _.debounce(search, 100)
   ctrl.open = function (e) {
     e.preventDefault()
-    var target = 'self'
+    var target = CONFIG.openinnewtab ? 'blank' : 'self'
+    service.open(selectedEntry, target)
+  }
+  ctrl.tryToOpen = function (e) {
+    if (e.keyCode !== 13) return
+    e.preventDefault()
+    var openinnewtab = selectedEntry.type === 'tab' ? false : CONFIG.openinnewtab
+    if (e.shiftKey) openinnewtab = !openinnewtab
+    var target = openinnewtab ? 'blank' : 'self'
     service.open(selectedEntry, target)
   }
   ctrl.isSelected = function (entry) {
@@ -246,8 +254,8 @@ var view = function (ctrl) {
 
   return [
     m('.container.' + CONFIG.theme + '-theme', {onkeydown: ctrl.nav, tabindex: '1'}, [
-      m('form', {onsubmit: ctrl.open}, [
-        m('input.keyword', {autofocus: true, oninput: ctrl.search})
+      m('form', [
+        m('input.keyword', {autofocus: true, oninput: ctrl.search, onkeydown: ctrl.tryToOpen})
       ]),
       m('ul.entries', _.isEmpty(entries) ? noMatchesView : entriesView)
     ])

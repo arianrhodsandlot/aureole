@@ -29,6 +29,9 @@
   "LIGHT": {
     "message": "亮色"
   },
+  "OPEN_IN_NEW_TAB": {
+    "message": "在新标签中打开结果"
+  },
   "SETTINGS": {
     "message": "选项"
   },

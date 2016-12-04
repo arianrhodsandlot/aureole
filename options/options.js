@@ -93,6 +93,10 @@ document.addEventListener('DOMContentLoaded', function() {
         ctrl.updateTheme = function (theme) {
           updateConfig('theme', theme)
         }
+
+        ctrl.updateOpenInNewTab = function (checked) {
+          updateConfig('openinnewtab', checked)
+        }
       },
       view: function (ctrl) {
         return [
@@ -101,13 +105,23 @@ document.addEventListener('DOMContentLoaded', function() {
             m('h3', i18n('SETTINGS')),
             m('.content', [
               m('.row', [
-                m('label', i18n('THEME', ':')),
+                m('label.theme-label', i18n('THEME', ':')),
                 m('select', {
                   onchange: m.withAttr('value', ctrl.updateTheme),
                   value: CONFIG.theme
                 }, [
                   m('option', {value: 'light'}, i18n('LIGHT')),
                   m('option', {value: 'dark'}, i18n('DARK'))
+                ])
+              ]),
+              m('.row', [
+                m('label', [
+                  m('input', {
+                    type: 'checkbox',
+                    onchange: m.withAttr('checked', ctrl.updateOpenInNewTab),
+                    checked: CONFIG.openinnewtab
+                  }),
+                  m('span', i18n('OPEN_IN_NEW_TAB'))
                 ])
               ])
             ])

@@ -29,6 +29,9 @@
   "LIGHT": {
     "message": "Light"
   },
+  "OPEN_IN_NEW_TAB": {
+    "message": "Open results in a new tab"
+  },
   "SETTINGS": {
     "message": "Settings"
   },
