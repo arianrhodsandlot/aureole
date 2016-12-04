@@ -7,10 +7,10 @@ try {
 CONFIG = _.defaults(CONFIG, {
   historySize: 100,
   lang: '',
-  openinnewtab: false
+  openinnewtab: false,
   resultsSize: 10,
   sort: ['tab', 'history', 'bookmark'],
-  theme: 'light',
+  theme: 'light'
 })
 localStorage.CONFIG = JSON.stringify(CONFIG)
 

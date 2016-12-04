@@ -60,10 +60,10 @@
     "message": "Version"
   },
   "AUREOLE_IS_AN_OPEN_SOURCE_SOFTWARE": {
-    "message": "Aureole是一个开源软件"
+    "message": "Aureole is an open-source software"
   },
   "AUREOLE_IS": {
-    "message": "Aureole is an extention which brings Sublime Text's \"Ctrl + P\" to your browser"
+    "message": "Aureole is an extention which brings the feature which is similar to Sublime Text's \"Ctrl + P\" to your browser"
   },
   "WITH_AUREOLE": {
     "message": "With Aureole, you can quickly switch between your bookmarks, your browsing history, and opening tabs"
