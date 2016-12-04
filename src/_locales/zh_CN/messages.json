@@ -87,7 +87,7 @@
     "message": "注意"
   },
   "WARNING_OF_ENABLE_CTRL_P": {
-    "message": "你的浏览器当前可能将Ctrl + P作为打印的快捷键了。要将Ctrl + P设为Aureole的快捷键，请按下面的步骤操作。"
+    "message": "你的浏览器当前可能将Ctrl + P作为“打印”的快捷键了。要将Ctrl + P设为Aureole的快捷键，请按下面的步骤操作。"
   },
   "NO_MATCHES": {
     "message": "没有相应结果……"
