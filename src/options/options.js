@@ -132,8 +132,8 @@ var render = function() {
           getMainView([
             m('h3', i18n('ABOUT')),
             m('.content', [
-              m('img', {src:''}),
               m('h4', [
+                m('img.icon', {src: '../../icon/icon48.png'}),
                 'Aureole',
                 ' - ',
                 m('span.info', i18n('A_SUPER_NAVIGATOR_FOR_YOUR_BROWSER'))
