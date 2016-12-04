@@ -104,6 +104,7 @@ select:focus {
 }
 .howtouse b {
   font-weight: bold;
+  color: red;
 }
 .steps {
   list-style: decimal;

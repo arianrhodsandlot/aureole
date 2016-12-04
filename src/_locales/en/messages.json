@@ -81,7 +81,7 @@
     "message": "ATTENTION"
   },
   "WARNING_OF_ENABLE_CTRL_P": {
-    "message": "Your browser may use Ctrl + P as a short cut for printing. To enable Ctrl + P for Aureole, follow steps showing bellow', '.')"
+    "message": "Your browser may be using Ctrl + P as a short cut for printing now. To enable Ctrl + P for Aureole, follow steps showing bellow', '.')"
   },
   "NO_MATCHES": {
     "message": "No matches found..."

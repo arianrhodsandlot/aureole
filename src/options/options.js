@@ -1,9 +1,4 @@
 var CONFIG
-try {
-  CONFIG = JSON.parse(localStorage.CONFIG)
-} catch (e) {
-  CONFIG = {}
-}
 
 var getAsideView = function () {
   var route = m.route()
@@ -30,7 +25,7 @@ var getMainView = function (content) {
   return m('.main', content)
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+var render = function() {
   var firstLoad = true
   m.route.mode = 'search'
   m.route(document.getElementById('option'), '', {
@@ -44,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       view: function (ctrl) {
         var needShowAttention = navigator.userAgent.toLowerCase().indexOf('mac os x') === -1
+        document.title = i18n('WELCOME')
         return [
           getAsideView(),
           getMainView([
@@ -85,9 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var ctrl = this
 
         var updateConfig = function (key, value) {
-          CONFIG[key] = value
-          localStorage.CONFIG = JSON.stringify(CONFIG)
-          m.redraw()
+          config.set(key, value).then(loadConfig).then(m.redraw)
         }
 
         ctrl.updateTheme = function (theme) {
@@ -95,10 +89,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         ctrl.updateOpenInNewTab = function (checked) {
-          updateConfig('openinnewtab', checked)
+          updateConfig('openInNewTab', checked)
         }
       },
       view: function (ctrl) {
+        document.title = i18n('SETTINGS')
         return [
           getAsideView(),
           getMainView([
@@ -119,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   m('input', {
                     type: 'checkbox',
                     onchange: m.withAttr('checked', ctrl.updateOpenInNewTab),
-                    checked: CONFIG.openinnewtab
+                    checked: CONFIG.openInNewTab
                   }),
                   m('span', i18n('OPEN_IN_NEW_TAB'))
                 ])
@@ -131,6 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
     about: {
       controller: _.noop,
       view: function () {
+        document.title = i18n('ABOUT')
         return [
           getAsideView(),
           getMainView([
@@ -157,6 +153,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     },
   })
-})
+}
 
-document.title = i18n('Settings')
+var loadConfig = function () {
+  return config.load('openInNewTab', 'theme')
+    .then(function (results) {
+      CONFIG = results
+    })
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  loadConfig().then(render)
+})

@@ -1,19 +1,4 @@
 var CONFIG
-try {
-  CONFIG = JSON.parse(localStorage.CONFIG)
-} catch (e) {
-  CONFIG = {}
-}
-CONFIG = _.defaults(CONFIG, {
-  historySize: 100,
-  lang: '',
-  openinnewtab: false,
-  resultsSize: 10,
-  sort: ['tab', 'history', 'bookmark'],
-  theme: 'light'
-})
-localStorage.CONFIG = JSON.stringify(CONFIG)
-
 var ENTRIES
 
 var bookmarks
@@ -194,23 +179,14 @@ var updateBookmarksEntriesLazy = _.partial(updateEntriesByTypeLazy, 'bookmark')
 var updateHistoryEntriesLazy = _.partial(updateEntriesByTypeLazy, 'history')
 var updatetabsEntriesLazy = _.partial(updateEntriesByTypeLazy, 'tab')
 
-chrome.bookmarks.onCreated.addListener(updateBookmarksEntriesLazy)
-chrome.bookmarks.onRemoved.addListener(updateBookmarksEntriesLazy)
-chrome.bookmarks.onChanged.addListener(updateBookmarksEntriesLazy)
-chrome.bookmarks.onMoved.addListener(updateBookmarksEntriesLazy)
-chrome.bookmarks.onChildrenReordered.addListener(updateBookmarksEntriesLazy)
+var loadConfig = function () {
+  return config.load('historySize', 'sort', 'resultsSize')
+    .then(function (results) {
+      CONFIG = results
+    })
+}
 
-chrome.history.onVisited.addListener(updateHistoryEntriesLazy)
-chrome.history.onVisitRemoved.addListener(updateHistoryEntriesLazy)
-
-chrome.tabs.onUpdated.addListener(updatetabsEntriesLazy)
-chrome.tabs.onMoved.addListener(updatetabsEntriesLazy)
-chrome.tabs.onDetached.addListener(updatetabsEntriesLazy)
-chrome.tabs.onAttached.addListener(updatetabsEntriesLazy)
-chrome.tabs.onRemoved.addListener(updatetabsEntriesLazy)
-chrome.tabs.onReplaced.addListener(updatetabsEntriesLazy)
-
-initAllEntries().then(function initialize () {
+var initialize = function () {
   var list = function () {
     var response = _.take(ENTRIES, CONFIG.resultsSize)
     return response
@@ -233,4 +209,22 @@ initAllEntries().then(function initialize () {
         break
     }
   })
-})
+}
+
+chrome.bookmarks.onCreated.addListener(updateBookmarksEntriesLazy)
+chrome.bookmarks.onRemoved.addListener(updateBookmarksEntriesLazy)
+chrome.bookmarks.onChanged.addListener(updateBookmarksEntriesLazy)
+chrome.bookmarks.onMoved.addListener(updateBookmarksEntriesLazy)
+chrome.bookmarks.onChildrenReordered.addListener(updateBookmarksEntriesLazy)
+
+chrome.history.onVisited.addListener(updateHistoryEntriesLazy)
+chrome.history.onVisitRemoved.addListener(updateHistoryEntriesLazy)
+
+chrome.tabs.onUpdated.addListener(updatetabsEntriesLazy)
+chrome.tabs.onMoved.addListener(updatetabsEntriesLazy)
+chrome.tabs.onDetached.addListener(updatetabsEntriesLazy)
+chrome.tabs.onAttached.addListener(updatetabsEntriesLazy)
+chrome.tabs.onRemoved.addListener(updatetabsEntriesLazy)
+chrome.tabs.onReplaced.addListener(updatetabsEntriesLazy)
+
+loadConfig().then(initAllEntries).then(initialize)
