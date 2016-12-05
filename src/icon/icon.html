@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html width="500" height="400">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #icon {
+      width: 1000px;
+      height: 1000px;
+      position: absolute;
+    }
+    .icon-inner {
+      border-radius: 50%;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate3d(-50%, -50%, 0);
+      border-radius: 50%;
+      background: white;
+    }
+    .icon-inner:nth-child(2n+1) {
+      background: rgb(255, 178, 0);
+    }
+    #icon-inner1 {
+      width: 1000px;
+      height: 1000px;
+    }
+    #icon-inner2 {
+      width: 800px;
+      height: 800px;
+    }
+    #icon-inner3 {
+      width: 600px;
+      height: 600px;
+    }
+    #icon-inner4 {
+      width: 400px;
+      height: 400px;
+    }
+    #icon-inner5 {
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <div id="icon">
+    <div id="icon-inner1" class="icon-inner"></div>
+    <div id="icon-inner2" class="icon-inner"></div>
+    <div id="icon-inner3" class="icon-inner"></div>
+    <div id="icon-inner4" class="icon-inner"></div>
+    <div id="icon-inner5" class="icon-inner"></div>
+  </div>
+</body>
+</html>
