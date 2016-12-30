@@ -217,11 +217,13 @@ var initialize = function () {
   }
 }
 
-chrome.bookmarks.onCreated.addListener(updateBookmarksEntriesLazy)
-chrome.bookmarks.onRemoved.addListener(updateBookmarksEntriesLazy)
-chrome.bookmarks.onChanged.addListener(updateBookmarksEntriesLazy)
-chrome.bookmarks.onMoved.addListener(updateBookmarksEntriesLazy)
-chrome.bookmarks.onChildrenReordered.addListener(updateBookmarksEntriesLazy)
+try { // only works in Chrome
+  chrome.bookmarks.onCreated.addListener(updateBookmarksEntriesLazy)
+  chrome.bookmarks.onRemoved.addListener(updateBookmarksEntriesLazy)
+  chrome.bookmarks.onChanged.addListener(updateBookmarksEntriesLazy)
+  chrome.bookmarks.onMoved.addListener(updateBookmarksEntriesLazy)
+  chrome.bookmarks.onChildrenReordered.addListener(updateBookmarksEntriesLazy)
+} catch (e) {}
 
 chrome.history.onVisited.addListener(updateHistoryEntriesLazy)
 chrome.history.onVisitRemoved.addListener(updateHistoryEntriesLazy)

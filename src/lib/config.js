@@ -7,9 +7,10 @@ var config = {
     sort: ['tab', 'history', 'bookmark'],
     theme: 'light'
   },
+  storage: chrome.storage.sync || chrome.storage.local,
   get: function (k) {
     return new Promise(function (resolve) {
-      chrome.storage.sync.get(k, function (result) {
+      config.storage.get(k, function (result) {
         resolve(result[k] || config.defaults[k])
       })
     })
@@ -18,7 +19,7 @@ var config = {
     return new Promise(function (resolve) {
       var config = {}
       config[k] = v
-      chrome.storage.sync.set(config, resolve)
+      config.storage.set(config, resolve)
     })
   },
   load: function () {
