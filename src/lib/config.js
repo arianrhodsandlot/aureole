@@ -17,9 +17,9 @@ var config = {
   },
   set: function (k, v) {
     return new Promise(function (resolve) {
-      var config = {}
-      config[k] = v
-      config.storage.set(config, resolve)
+      var item = {}
+      item[k] = v
+      config.storage.set(item, resolve)
     })
   },
   load: function () {

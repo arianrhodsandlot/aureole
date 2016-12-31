@@ -82,15 +82,15 @@ var controller = function (data) {
   ctrl.search = _.debounce(search, 100)
   ctrl.open = function (e) {
     e.preventDefault()
-    var target = CONFIG.openinnewtab ? 'blank' : 'self'
+    var target = CONFIG.openInNewTab ? 'blank' : 'self'
     service.open(selectedEntry, target)
   }
   ctrl.tryToOpen = function (e) {
     if (e.keyCode !== 13) return
     e.preventDefault()
-    var openinnewtab = selectedEntry.type === 'tab' ? false : CONFIG.openinnewtab
-    if (e.shiftKey) openinnewtab = !openinnewtab
-    var target = openinnewtab ? 'blank' : 'self'
+    var openInNewTab = selectedEntry.type === 'tab' ? false : CONFIG.openInNewTab
+    if (e.shiftKey) openInNewTab = !openInNewTab
+    var target = openInNewTab ? 'blank' : 'self'
     service.open(selectedEntry, target)
   }
   ctrl.isSelected = function (entry) {
