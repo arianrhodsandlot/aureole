@@ -116,7 +116,8 @@ var render = function() {
                     onchange: m.withAttr('checked', ctrl.updateOpenInNewTab),
                     checked: CONFIG.openInNewTab
                   }),
-                  m('span', i18n('OPEN_IN_NEW_TAB'))
+                  m('span', i18n('OPEN_IN_NEW_TAB')),
+                  m('small', i18n('(', CONFIG.openInNewTab ? 'OPEN_IN_CURRENT_TAB_WITH_SHIFT' : 'OPEN_IN_NEW_TAB_WITH_SHIFT', ')'))
                 ])
               ])
             ])

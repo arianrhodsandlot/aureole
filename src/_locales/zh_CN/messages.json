@@ -11,6 +11,12 @@
   "semi": {
     "message": "；"
   },
+  "parenthesis_left": {
+    "message": "（"
+  },
+  "parenthesis_right": {
+    "message": "）"
+  },
   "ABOUT": {
     "message": "关于"
   },
@@ -30,7 +36,13 @@
     "message": "亮色"
   },
   "OPEN_IN_NEW_TAB": {
-    "message": "在新标签中打开结果"
+    "message": "在新标签页中打开结果"
+  },
+  "OPEN_IN_NEW_TAB_WITH_SHIFT": {
+    "message": "按Shift在新标签页中打开"
+  },
+  "OPEN_IN_CURRENT_TAB_WITH_SHIFT": {
+    "message": "按Shift在当前标签页中打开"
   },
   "SETTINGS": {
     "message": "选项"
@@ -39,10 +51,10 @@
     "message": "主题"
   },
   "THE_TAB_IS_IN_AN_OTHER_WINDOW": {
-    "message": "该标签位于其它窗口中"
+    "message": "该标签页位于其它窗口中"
   },
   "THE_TAB_IS_IN_THE_WINDOW_YOU_ARE_USING_NOW": {
-    "message": "该标签位于当前窗口中"
+    "message": "该标签页位于当前窗口中"
   },
   "WELCOME": {
     "message": "欢迎"

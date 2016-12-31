@@ -14,6 +14,12 @@ var i18n = (function () {
         case ';':
           text = 'semi'
           break
+        case '(':
+          text = 'parenthesis_left'
+          break
+        case ')':
+          text = 'parenthesis_right'
+          break
       }
       var result = chrome.i18n.getMessage(text)
       if (!result) {

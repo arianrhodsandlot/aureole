@@ -11,6 +11,12 @@
   "semi": {
     "message": ";"
   },
+  "parenthesis_left": {
+    "message": "("
+  },
+  "parenthesis_right": {
+    "message": ")"
+  },
   "ABOUT": {
     "message": "About"
   },
@@ -30,7 +36,13 @@
     "message": "Light"
   },
   "OPEN_IN_NEW_TAB": {
-    "message": "Open results in a new tab"
+    "message": "Open the result in a new tab"
+  },
+  "OPEN_IN_NEW_TAB_WITH_SHIFT": {
+    "message": "Press Shift to open in a new tab"
+  },
+  "OPEN_IN_CURRENT_TAB_WITH_SHIFT": {
+    "message": "Press Shift to open in the current tab"
   },
   "SETTINGS": {
     "message": "Settings"

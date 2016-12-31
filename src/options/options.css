@@ -98,6 +98,9 @@ select {
 select:focus {
   border-color: #4d90fe
 }
+small {
+  font-size: 12px;
+}
 .overview {
   margin: 10px 0 0 0;
   font-size: 12px;
