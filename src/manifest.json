@@ -1,0 +1,43 @@
+{
+  "name": "Aureole",
+  "version": "1.0.0",
+  "description": "__MSG_AUREOLE_IS__",
+  "permissions": [
+    "bookmarks",
+    "history",
+    "tabs",
+    "storage"
+  ],
+  "default_locale": "en",
+  "background": {
+    "scripts": [
+      "vendor/fuse.min.js",
+      "vendor/lodash.min.js",
+      "lib/config.js",
+      "background.js"
+    ]
+  },
+  "options_page": "options/options.html",
+  "browser_action": {
+      "default_title": "Aureole",
+      "default_icon": "icon/icon16.png",
+      "default_popup": "popup/popup.html"
+  },
+  "icons": {
+    "16": "icon/icon16.png",
+    "48": "icon/icon48.png",
+    "128": "icon/icon128.png"
+  },
+  "manifest_version": 2,
+  "commands": {
+    "_execute_browser_action": {
+      "global": true,
+      "description": "Open Aureole",
+      "suggested_key": {
+        "windows": "Ctrl+P",
+        "mac": "Command+P",
+        "linux": "Ctrl+P"
+      }
+    }
+  }
+}
