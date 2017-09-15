@@ -1,4 +1,8 @@
-var CONFIG
+var CONFIG = {
+  historySize: 100,
+  resultsSize: 10,
+  sort: ['tab', 'history', 'bookmark']
+}
 var ENTRIES
 
 var bookmarks
@@ -179,13 +183,6 @@ var updateBookmarksEntriesLazy = _.partial(updateEntriesByTypeLazy, 'bookmark')
 var updateHistoryEntriesLazy = _.partial(updateEntriesByTypeLazy, 'history')
 var updatetabsEntriesLazy = _.partial(updateEntriesByTypeLazy, 'tab')
 
-var loadConfig = function () {
-  return config.load('historySize', 'sort', 'resultsSize')
-    .then(function (results) {
-      CONFIG = results
-    })
-}
-
 var initialize = function () {
   var list = function () {
     var response = _.take(ENTRIES, CONFIG.resultsSize)
@@ -235,4 +232,4 @@ chrome.tabs.onAttached.addListener(updatetabsEntriesLazy)
 chrome.tabs.onRemoved.addListener(updatetabsEntriesLazy)
 chrome.tabs.onReplaced.addListener(updatetabsEntriesLazy)
 
-loadConfig().then(initAllEntries).then(initialize)
+initAllEntries().then(initialize)

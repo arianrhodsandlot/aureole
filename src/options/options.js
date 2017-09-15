@@ -1,168 +1,110 @@
-var CONFIG
-
-var getAsideView = function () {
-  var route = m.route()
-  return m('aside', [
-    m('h1', 'Aureole'),
-    m('nav.navs', [
-      m('a.nav[href=welcome]', {
-        class: route === 'welcome' ? 'active' : null,
-        config: m.route
-      }, i18n('Welcome')),
-      m('a.nav[href]', {
-        class: route === '' ? 'active' : null,
-        config: m.route
-      }, i18n('Settings')),
-      m('a.nav.about[href=about]', {
-        class: route === 'about' ? 'active' : null,
-        config: m.route
-      }, i18n('About'))
-    ])
-  ])
-}
-
-var getMainView = function (content) {
-  return m('.main', content)
-}
-
-var render = function() {
-  var firstLoad = true
-  m.route.mode = 'search'
-  m.route(document.getElementById('option'), '', {
-    welcome: {
-      controller: function () {
-        var ctrl = this
-        ctrl.openChromeExtentionsPage = function (e) {
-          e.preventDefault()
-          chrome.tabs.create({url:'chrome://extensions/#footer-section'})
-        }
+const __ = Demiurge.i18n
+Demiurge({
+  title: 'XXX的选项',
+  sections: [{
+    title: '设置',
+    rows: [[{
+      type: Demiurge.constants.cellTypes.icon,
+      ui: { icon: 'format_color_fill' }
+    }, {
+      type: Demiurge.constants.cellTypes.head,
+      ui: { title: __('THEME') }
+    }, {
+      type: Demiurge.constants.cellTypes.input,
+      ui: {
+        type: Demiurge.constants.inputTypes.select,
+        hintText: '请选择主题',
+        options: [{text: __('LIGHT'), value: 'light'}, {text: __('DARK'), value: 'dark'}]
       },
-      view: function (ctrl) {
-        var needShowAttention = navigator.userAgent.toLowerCase().indexOf('mac os x') === -1
-        document.title = i18n('WELCOME')
-        return [
-          getAsideView(),
-          getMainView([
-            m('h3', i18n('WELCOME')),
-            m('.content', [
-              m('.thanks', i18n('THANKS_FOR_INSTALLING_AUREOLE', '.')),
-              m('.overview', [
-                m('p', i18n('AUREOLE_IS', '.')),
-                m('p', i18n('WITH_AUREOLE', '.'))
-              ]),
-              needShowAttention ?
-              m('div', [
-                m('.howtouse', [
-                  m('b', i18n('ATTENTION', ':')),
-                  i18n('WARNING_OF_ENABLE_CTRL_P')
-                ]),
-                m('ol.steps', [
-                  m('li.step', [
-                    i18n('OPEN'),
-                    m('a', {
-                      href: 'chrome://extensions/',
-                      target: '_blank',
-                      onclick: ctrl.openChromeExtentionsPage
-                    }, 'chrome://extensions/'),
-                    i18n(';')
-                  ]),
-                  m('li.step', i18n('SCROLL_TO', ';')),
-                  m('li.step', i18n('ENTER_CTRL_P', '.')),
-                ])
-              ])
-              : null
-            ])
-          ])
-        ]
-      }
-    },
-    '': {
-      controller: function () {
-        var ctrl = this
-
-        var updateConfig = function (key, value) {
-          config.set(key, value).then(loadConfig).then(m.redraw)
-        }
-
-        ctrl.updateTheme = function (theme) {
-          updateConfig('theme', theme)
-        }
-
-        ctrl.updateOpenInNewTab = function (checked) {
-          updateConfig('openInNewTab', checked)
-        }
+      model: { key: 'theme', default: 'light' }
+    }], [{
+      type: Demiurge.constants.cellTypes.icon,
+      ui: { icon: 'reorder' }
+    }, {
+      type: Demiurge.constants.cellTypes.head,
+      ui: { title: '是否新标签打开', subtitle: '启用时，按Shift在当前标签打开；禁用时，按Shift在新标签打开' }
+    }, {
+      type: Demiurge.constants.cellTypes.input,
+      ui: {
+        type: Demiurge.constants.inputTypes.checkbox,
+        label: '显示'
       },
-      view: function (ctrl) {
-        document.title = i18n('SETTINGS')
-        return [
-          getAsideView(),
-          getMainView([
-            m('h3', i18n('SETTINGS')),
-            m('.content', [
-              m('.row', [
-                m('label.theme-label', i18n('THEME', ':')),
-                m('select', {
-                  onchange: m.withAttr('value', ctrl.updateTheme),
-                  value: CONFIG.theme
-                }, [
-                  m('option', {value: 'light'}, i18n('LIGHT')),
-                  m('option', {value: 'dark'}, i18n('DARK'))
-                ])
-              ]),
-              m('.row', [
-                m('label', [
-                  m('input', {
-                    type: 'checkbox',
-                    onchange: m.withAttr('checked', ctrl.updateOpenInNewTab),
-                    checked: CONFIG.openInNewTab
-                  }),
-                  m('span', i18n('OPEN_IN_NEW_TAB')),
-                  m('small', i18n('(', CONFIG.openInNewTab ? 'OPEN_IN_CURRENT_TAB_WITH_SHIFT' : 'OPEN_IN_NEW_TAB_WITH_SHIFT', ')'))
-                ])
-              ])
-            ])
-          ])
-        ]}
-    },
-    about: {
-      controller: _.noop,
-      view: function () {
-        document.title = i18n('ABOUT')
-        return [
-          getAsideView(),
-          getMainView([
-            m('h3', i18n('ABOUT')),
-            m('.content', [
-              m('h4', [
-                m('img.icon', {src: '../../icon/icon48.png'}),
-                'Aureole',
-                ' - ',
-                m('span.info', i18n('A_SUPER_NAVIGATOR_FOR_YOUR_BROWSER'))
-              ]),
-              m('.version', i18n('VERSION', ':') + '1.0.0'),
-              m('.open-source', [
-                m('span', i18n('AUREOLE_IS_AN_OPEN_SOURCE_SOFTWARE', '.')),
-                m('span', [
-                  i18n('GET_SOURCE'),
-                  m('a', {href: 'http://github.com/arianrhodsandlot/Aureole'}, 'GitHub'),
-                  i18n('GET_SOURCE_TRAILING_WORDS', '.')
-                ])
-              ])
-            ])
-          ])
-        ]
+      model: { key: 'showContextMenu', default: true }
+    }], [{
+      type: Demiurge.constants.cellTypes.icon,
+      ui: { icon: 'sync' }
+    }, {
+      type: Demiurge.constants.cellTypes.head,
+      ui: { title: '同步设置' }
+    }, {
+      type: Demiurge.constants.cellTypes.input,
+      ui: {
+        disabled: !Demiurge.isSyncAvailable(),
+        type: Demiurge.constants.inputTypes.checkbox,
+        label: '同步'
+      },
+      model: { key: 'enableSync', default: false }
+    }]]
+  }, {
+    title: '快捷键',
+    rows: [[{
+      type: Demiurge.constants.cellTypes.icon,
+      ui: { icon: 'keyboard' }
+    }, {
+      type: Demiurge.constants.cellTypes.head,
+      ui: { title: '快捷键', subtitle: '在浏览器的设置中自定义你希望使用的快捷键（如Ctrl + P）' }
+    }, {
+      type: Demiurge.constants.cellTypes.button,
+      ui: {
+        label: '去设置',
+        link: 'vivaldi://settings/help'
       }
-    },
-  })
-}
-
-var loadConfig = function () {
-  return config.load('openInNewTab', 'theme')
-    .then(function (results) {
-      CONFIG = results
+    }]]
+  }, {
+    title: '关于',
+    rows: [[{
+      type: Demiurge.constants.cellTypes.icon,
+      ui: { icon: 'info_outline' }
+    }, {
+      type: Demiurge.constants.cellTypes.head,
+      ui: { title: 'XXX 0.1.0', subtitle: 'a', cols: 10 }
+    }], [{
+      type: Demiurge.constants.cellTypes.icon,
+      ui: { icon: 'star' }
+    }, {
+      type: Demiurge.constants.cellTypes.button,
+      ui: { label: '评价', link: 'http://github.com/xxx', cols: 3 }
+    }, {
+      type: Demiurge.constants.cellTypes.icon,
+      ui: { icon: 'help_outline' }
+    }, {
+      type: Demiurge.constants.cellTypes.button,
+      ui: { label: '反馈问题', link: 'http://github.com/xxx', cols: 3 }
+    }, {
+      type: Demiurge.constants.cellTypes.icon,
+      ui: { icon: 'code' }
+    }, {
+      type: Demiurge.constants.cellTypes.button,
+      ui: { label: '查看源代码', link: 'http://github.com/xxx', cols: 3 }
+    }]]
+  }]
+})
+.onUserStorageLoaded(function (userStorage) {
+  if (userStorage.enableSync) {
+    Demiurge.enableSync().then(() => {
+      Demiurge.render()
     })
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-  loadConfig().then(render)
+  } else {
+    Demiurge.disableSync().then(() => {
+      Demiurge.render()
+    })
+  }
+})
+.onUserStorageChanged(function (key, value) {
+  if (key !== 'enableSync') return
+  if (value) {
+    Demiurge.enableSync()
+  } else {
+    Demiurge.disableSync()
+  }
 })
