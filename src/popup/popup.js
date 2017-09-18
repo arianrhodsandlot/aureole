@@ -3,12 +3,13 @@ var defaultFavIcon = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYA
 
 var CONFIG
 
+var i18n = Demiurge.i18n
+
 var service = {}
 var sendMessage = function (message) {
   var deferred = m.deferred()
   m.startComputation()
   chrome.runtime.sendMessage(message, function (response) {
-    console.log(message)
     response = JSON.parse(response || '{}')
     deferred.resolve(response)
     m.endComputation()
@@ -268,7 +269,6 @@ document.addEventListener('DOMContentLoaded', function() {
   _.defer(function () { // wait for popup window finish it's animation when in macOS
     Demiurge.getUserStorage().then((userStorage) => {
       CONFIG = userStorage
-      console.log(CONFIG)
       m.mount(document.getElementById('aureole'), {controller, view})
     })
   })

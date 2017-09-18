@@ -14,7 +14,7 @@
       "vendor/fuse.min.js",
       "vendor/lodash.min.js",
       "lib/demiurge.min.js",
-      "lib/config.js",
+      "lib/demiurge-manifest.js",
       "background.js"
     ]
   },
