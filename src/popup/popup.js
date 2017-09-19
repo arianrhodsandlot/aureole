@@ -34,7 +34,7 @@ service.open = function (entry, target) {
   _.defer(close)
 }
 
-var controller = function (data) {
+var controller = function () {
   var ctrl = this
 
   var selectedEntry
@@ -51,9 +51,6 @@ var controller = function (data) {
       deferred.reject()
     }
     return deferred.promise
-  }
-  var scrollIntoViewIfNeeded = function (el) {
-    el.scrollIntoViewIfNeeded()
   }
   var initialize = function (keyword) {
     keyword = _.trim(keyword)
@@ -165,7 +162,11 @@ var controller = function (data) {
     return defaultFavIcon
   }
   ctrl.scrollIntoViewIfNeeded = function (entry) {
-    return ctrl.isSelected(entry) ? scrollIntoViewIfNeeded : _.noop
+    return ctrl.isSelected(entry)
+      ? function (el) {
+        el.scrollIntoViewIfNeeded()
+      }
+      : _.noop
   }
   ctrl.highlight = function (text, keyword) {
     return _.map(text, function (char) {
@@ -252,7 +253,18 @@ var view = function (ctrl) {
   return [
     m('.container.' + CONFIG.theme + '-theme', {onkeydown: ctrl.nav, tabindex: '1'}, [
       m('form', [
-        m('input.keyword', {autofocus: true, oninput: ctrl.search, onkeydown: ctrl.tryToOpen})
+        m('input.keyword', {
+          autofocus: true,
+          oninput: ctrl.search,
+          onkeydown: ctrl.tryToOpen,
+          onblur: function (e) {
+            e.target.focus()
+          },
+          config: function (el, isInit) {
+            if (isInit) return
+            el.focus()
+          }
+        })
       ]),
       m('ul.entries', _.isEmpty(entries) ? noMatchesView : entriesView)
     ])
