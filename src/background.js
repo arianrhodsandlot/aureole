@@ -206,12 +206,6 @@ var initialize = function () {
         break
     }
   })
-
-  if (!localStorage.installedAt) {
-    chrome.tabs.create({url: "options/options.html?welcome"}, function () {
-      localStorage.installedAt = _.now()
-    })
-  }
 }
 
 try { // only works in Chrome

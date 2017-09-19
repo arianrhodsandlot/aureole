@@ -1,7 +1,5 @@
-const __ = Demiurge.i18n
-
 Demiurge({
-  title: 'XXX的选项',
+  title: 'Aureole的选项',
   sections: [{
     title: '设置',
     rows: [[{
@@ -9,13 +7,13 @@ Demiurge({
       ui: { icon: 'format_color_fill' }
     }, {
       type: Demiurge.constants.cellTypes.head,
-      ui: { title: __('THEME') }
+      ui: { title: Demiurge.i18n('THEME') }
     }, {
       type: Demiurge.constants.cellTypes.input,
       ui: {
         type: Demiurge.constants.inputTypes.select,
         hintText: '请选择主题',
-        options: [{text: __('LIGHT'), value: 'light'}, {text: __('DARK'), value: 'dark'}]
+        options: [{text: Demiurge.i18n('LIGHT'), value: 'light'}, {text: Demiurge.i18n('DARK'), value: 'dark'}]
       },
       storage: { key: 'theme', default: 'light' }
     }], [{
@@ -23,12 +21,12 @@ Demiurge({
       ui: { icon: 'reorder' }
     }, {
       type: Demiurge.constants.cellTypes.head,
-      ui: { title: '新标签打开结果', subtitle: '启用时，按Shift在当前标签打开；禁用时，按Shift在新标签打开' }
+      ui: { title: Demiurge.i18n('OPEN_IN_NEW_TAB'), subtitle: '启用时，按Shift在当前标签打开；禁用时，按Shift在新标签打开' }
     }, {
       type: Demiurge.constants.cellTypes.input,
       ui: {
         type: Demiurge.constants.inputTypes.checkbox,
-        label: '在新标签打开'
+        label: Demiurge.i18n('OPEN_IN_NEW_TAB')
       },
       storage: { key: 'openInNewTab', default: true }
     }]]
@@ -54,7 +52,7 @@ Demiurge({
       ui: { icon: 'info_outline' }
     }, {
       type: Demiurge.constants.cellTypes.head,
-      ui: { title: 'Aureole 1.0.1', subtitle: __('AUREOLE_IS'), cols: 10 }
+      ui: { title: 'Aureole 1.0.1', subtitle: Demiurge.i18n('AUREOLE_IS'), cols: 10 }
     }], [{
       type: Demiurge.constants.cellTypes.icon,
       ui: { icon: 'star' }

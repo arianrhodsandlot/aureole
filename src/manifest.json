@@ -13,7 +13,7 @@
     "scripts": [
       "vendor/fuse.min.js",
       "vendor/lodash.min.js",
-      "lib/demiurge.min.js",
+      "vendor/demiurge.min.js",
       "lib/demiurge-manifest.js",
       "background.js"
     ]
@@ -35,9 +35,9 @@
       "global": true,
       "description": "Open Aureole",
       "suggested_key": {
-        "windows": "Ctrl+P",
-        "mac": "Command+P",
-        "linux": "Ctrl+P"
+        "windows": "Ctrl+E",
+        "mac": "Command+E",
+        "linux": "Ctrl+E"
       }
     }
   }
