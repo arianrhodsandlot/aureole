@@ -1,4 +1,4 @@
-Demiurge({
+Demiurge(Demiurge.i18n({
   title: 'Aureole的选项',
   sections: [{
     title: '设置',
@@ -7,12 +7,12 @@ Demiurge({
       ui: { icon: 'format_color_fill' }
     }, {
       type: Demiurge.constants.cellTypes.head,
-      ui: { title: Demiurge.i18n('THEME') }
+      ui: { title: 'THEME' }
     }, {
       type: Demiurge.constants.cellTypes.input,
       ui: {
         type: Demiurge.constants.inputTypes.select,
-        hintText: '请选择主题',
+        hintText: 'CHOOSE_A_THEME',
         options: [{text: Demiurge.i18n('LIGHT'), value: 'light'}, {text: Demiurge.i18n('DARK'), value: 'dark'}]
       },
       storage: { key: 'theme', default: 'light' }
@@ -21,7 +21,7 @@ Demiurge({
       ui: { icon: 'reorder' }
     }, {
       type: Demiurge.constants.cellTypes.head,
-      ui: { title: Demiurge.i18n('OPEN_IN_NEW_TAB'), subtitle: '启用时，按Shift在当前标签打开；禁用时，按Shift在新标签打开' }
+      ui: { title: Demiurge.i18n('OPEN_IN_NEW_TAB'), subtitle: 'OPEN_IN_NEW_TAB_SUBTITLE' }
     }, {
       type: Demiurge.constants.cellTypes.input,
       ui: {
@@ -31,22 +31,22 @@ Demiurge({
       storage: { key: 'openInNewTab', default: true }
     }]]
   }, {
-    title: '快捷键',
+    title: 'SHORTCUT',
     rows: [[{
       type: Demiurge.constants.cellTypes.icon,
       ui: { icon: 'keyboard' }
     }, {
       type: Demiurge.constants.cellTypes.head,
-      ui: { title: '快捷键', subtitle: '在浏览器的设置中自定义你希望使用的快捷键（如Ctrl + P）' }
+      ui: { title: 'SHORTCUT', subtitle: 'SHORTCUT_SUBTITLE' }
     }, {
       type: Demiurge.constants.cellTypes.button,
       ui: {
-        label: '去设置',
+        label: 'CONFIGURE_SHORTCUTS',
         link: 'chrome://extensions/configureCommands'
       }
     }]]
   }, {
-    title: '关于',
+    title: 'ABOUT',
     rows: [[{
       type: Demiurge.constants.cellTypes.icon,
       ui: { icon: 'info_outline' }
@@ -58,19 +58,19 @@ Demiurge({
       ui: { icon: 'star' }
     }, {
       type: Demiurge.constants.cellTypes.button,
-      ui: { label: '评价', link: 'https://chrome.google.com/webstore/detail/aureole/plfglniepgcommenlfbniohcknjdcdjd/reviews?utm_source=chrome-ntp-icon', cols: 3 }
+      ui: { label: 'REVIEW', link: 'https://chrome.google.com/webstore/detail/aureole/plfglniepgcommenlfbniohcknjdcdjd/reviews?utm_source=chrome-ntp-icon', cols: 3 }
     }, {
       type: Demiurge.constants.cellTypes.icon,
       ui: { icon: 'help_outline' }
     }, {
       type: Demiurge.constants.cellTypes.button,
-      ui: { label: '反馈问题', link: 'https://github.com/arianrhodsandlot/Aureole/issues/new', cols: 3 }
+      ui: { label: 'FEEDBACK', link: 'https://github.com/arianrhodsandlot/Aureole/issues/new', cols: 3 }
     }, {
       type: Demiurge.constants.cellTypes.icon,
       ui: { icon: 'code' }
     }, {
       type: Demiurge.constants.cellTypes.button,
-      ui: { label: '查看源代码', link: 'https://github.com/arianrhodsandlot/Aureole', cols: 3 }
+      ui: { label: 'SOURCE_CODE', link: 'https://github.com/arianrhodsandlot/Aureole', cols: 3 }
     }]]
   }]
-})
+}))
