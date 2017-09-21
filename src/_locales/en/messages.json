@@ -1,54 +1,48 @@
 {
-  "colon": {
-    "message": ":"
-  },
-  "comma": {
-    "message": ","
-  },
-  "period": {
-    "message": "."
-  },
-  "semi": {
-    "message": ";"
-  },
-  "parenthesis_left": {
-    "message": "("
-  },
-  "parenthesis_right": {
-    "message": ")"
-  },
   "ABOUT": {
     "message": "About"
   },
-  "AUTO_DETECT": {
-    "message": "Auto Detect"
+  "AUREOLE_DESCRIPTION": {
+    "message": "Aureole is an extention which can quick-open your bookmarks or browsing history."
+  },
+  "AUREOLE_SETTINGS": {
+    "message": "Aureole Settings"
+  },
+  "CHOOSE_A_THEME": {
+    "message": "Choose a theme"
+  },
+  "CONFIGURE_SHORTCUTS": {
+    "message": "Configure shortcuts"
   },
   "DARK": {
-    "message": "Dark"
+    "message": "暗色"
   },
-  "GET_SOURCE": {
-    "message": "You can get it's source from "
+  "FEEDBACK": {
+    "message": "Feedback"
   },
-  "GET_SOURCE_TRAILING_WORDS": {
-    "message": ""
-  },
-  "LIGHT": {
-    "message": "Light"
+  "NO_MATCHES_": {
+    "message": "No matches found..."
   },
   "OPEN_IN_NEW_TAB": {
-    "message": "Open the result in a new tab"
+    "message": "Open in new tab"
   },
-  "OPEN_IN_NEW_TAB_WITH_SHIFT": {
-    "message": "Press Shift to open in a new tab"
+  "OPEN_IN_NEW_TAB_SUBTITLE": {
+    "message": "When it's enabled, press Shift will open the result in a new tab; when it's disabled, press Shift will open the result in the current tab"
   },
-  "OPEN_IN_CURRENT_TAB_WITH_SHIFT": {
-    "message": "Press Shift to open in the current tab"
+  "REVIEW": {
+    "message": "Review"
   },
   "SETTINGS": {
     "message": "Settings"
   },
-  "THEME": {
-    "message": "Theme"
+  "SHORTCUT": {
+    "message": "Shortcut"
+  },
+  "SHORTCUT_SUBTITLE": {
+    "message": "Defaults to Ctrl + E (⌘ + E for macOS)"
+  },
+  "SOURCE_CODE": {
+    "message": "Source code"
   },
   "THE_TAB_IS_IN_AN_OTHER_WINDOW": {
     "message": "The tab is in an other window"
@@ -56,46 +50,13 @@
   "THE_TAB_IS_IN_THE_WINDOW_YOU_ARE_USING_NOW": {
     "message": "The tab is in the window you are using now"
   },
-  "WELCOME": {
-    "message": "Welcome"
-  },
-  "YOU_VE_VISITED_THIS_PAGE_MANY_TIMES": {
-    "message": "You've visited this page many times"
+  "THEME": {
+    "message": "Theme"
   },
   "YOU_VE_VISITED_THIS_PAGE": {
     "message": "You've visited this page"
   },
-  "A_SUPER_NAVIGATOR_FOR_YOUR_BROWSER": {
-    "message": "A Super Navigator for Your Browser"
-  },
-  "VERSION": {
-    "message": "Version"
-  },
-  "AUREOLE_IS_AN_OPEN_SOURCE_SOFTWARE": {
-    "message": "Aureole is an open-source software"
-  },
-  "AUREOLE_IS": {
-    "message": "Aureole is an extention which brings the feature which is similar to Sublime Text's \"Ctrl + P\" to your browser"
-  },
-  "WITH_AUREOLE": {
-    "message": "With Aureole, you can quickly switch between your bookmarks, your browsing history, and opening tabs"
-  },
-  "OPEN": {
-    "message": "Open "
-  },
-  "SCROLL_TO": {
-    "message": "Scroll to the bottom of that page and click short cuts"
-  },
-  "ENTER_CTRL_P": {
-    "message": "Enter Ctrl + P into the input area after \"Aureole\""
-  },
-  "ATTENTION": {
-    "message": "ATTENTION"
-  },
-  "WARNING_OF_ENABLE_CTRL_P": {
-    "message": "Your browser may be using Ctrl + P as a short cut for \"Print\" now. To enable Ctrl + P for Aureole, follow steps showing bellow', '.')"
-  },
-  "NO_MATCHES": {
-    "message": "No matches found..."
+  "YOU_VE_VISITED_THIS_PAGE_MANY_TIMES": {
+    "message": "You've visited this page many times"
   }
 }

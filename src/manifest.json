@@ -1,7 +1,7 @@
 {
   "name": "Aureole",
   "version": "1.0.0",
-  "description": "__MSG_AUREOLE_IS__",
+  "description": "__MSG_AUREOLE_DESCRIPTION__",
   "permissions": [
     "bookmarks",
     "history",
