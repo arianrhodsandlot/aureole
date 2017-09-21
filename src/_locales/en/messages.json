@@ -15,10 +15,13 @@
     "message": "Configure shortcuts"
   },
   "DARK": {
-    "message": "暗色"
+    "message": "Dark"
   },
   "FEEDBACK": {
     "message": "Feedback"
+  },
+  "LIGHT": {
+    "message": "Light"
   },
   "NO_MATCHES_": {
     "message": "No matches found..."
