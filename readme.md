@@ -1,3 +1,15 @@
+<div align="center">
+
+**⚠️ DEPRACATED ⚠️**
+  
+This extension is depracated and has been removed from Chrome Web Store.
+
+Please use Chrome's native "Tab Search" instead, see [How to Search Open Tabs in Google Chrome](https://geekrumor.com/1680/how-to-search-open-tabs-in-google-chrome/).
+
+</div>
+
+---
+
 # Aureole
 
 ## Overview
